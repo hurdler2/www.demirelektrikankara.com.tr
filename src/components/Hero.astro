@@ -1,0 +1,207 @@
+---
+import { site, trustBadges } from '@data/site';
+import Icon from './Icon.astro';
+import PhoneButton from './PhoneButton.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <!--
+    Hero arka planı: public/images/hero-bg.svg (marka renklerinde vektörel görsel).
+    Gerçek bir elektrik teknisyeni / pano fotoğrafı geldiğinde:
+      1. Fotoğrafı public/images/hero.webp olarak kaydet (önerilen 1920x1080, < 250 KB).
+      2. Aşağıdaki <img> src'sini /images/hero.webp yap.
+    Koyu gradient overlay (.hero__overlay) yazıların okunabilirliğini korur.
+  -->
+  <div class="hero__bg" aria-hidden="true">
+    <img src="/images/hero-bg.svg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
+    <div class="hero__overlay"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="hero__eyebrow">
+        <Icon name="map-pin" size={16} />
+        Sincan merkezli · Ankara'nın tüm ilçelerine hizmet
+      </p>
+      <h1 id="hero-title" class="hero__title">Ankara Elektrikçi ve Elektrik Servisi</h1>
+      <p class="hero__subtitle">Elektrik Arızasından Fabrika Otomasyonuna Profesyonel Elektrik Çözümleri</p>
+      <p class="hero__text">
+        15 yılı aşkın sektör tecrübemizle Ankara genelinde ev, villa, bina, mağaza, fabrika ve iş makineleri için elektrik
+        tesisatı, arıza, pano, otomasyon, aydınlatma ve montaj hizmetleri sunuyoruz.
+      </p>
+      <div class="hero__actions">
+        <PhoneButton size="lg" />
+        <WhatsAppLink size="lg" />
+      </div>
+      <a href={site.phone.href} class="hero__phone">
+        <Icon name="phone" size={22} />
+        <span>{site.phone.display}</span>
+        <small>{site.hours.daysText} {site.hours.display}</small>
+      </a>
+    </div>
+
+    <ul class="hero__badges" aria-label="Güven unsurları">
+      {
+        trustBadges.map((b, i) => (
+          <li class="hero__badge reveal" data-delay={i}>
+            <span class="icon-badge icon-badge--solid"><Icon name={b.icon} size={22} /></span>
+            <div>
+              <strong>{b.title}</strong>
+              <span>{b.text}</span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    color: var(--white);
+    overflow: hidden;
+    background: var(--primary-dark);
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+  }
+  .hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% center;
+  }
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(11, 18, 32, 0.96) 0%, rgba(11, 18, 32, 0.86) 45%, rgba(11, 18, 32, 0.55) 100%),
+      linear-gradient(180deg, rgba(11, 18, 32, 0.2) 0%, rgba(11, 18, 32, 0.9) 100%);
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    padding-block: clamp(3rem, 7vw, 6.5rem) clamp(2.5rem, 5vw, 4rem);
+  }
+  .hero__content {
+    max-width: 720px;
+  }
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.875rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 193, 7, 0.35);
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--yellow);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+  }
+  .hero__title {
+    margin-top: 1.25rem;
+    font-size: var(--fs-3xl);
+    line-height: 1.08;
+  }
+  .hero__subtitle {
+    margin-top: 0.875rem;
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    color: var(--yellow);
+    text-wrap: balance;
+  }
+  .hero__text {
+    margin-top: 1rem;
+    max-width: 60ch;
+    font-size: var(--fs-md);
+    color: var(--on-dark);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .hero__actions :global(.btn) {
+    flex: 1 1 200px;
+  }
+  @media (min-width: 640px) {
+    .hero__actions :global(.btn) {
+      flex: 0 0 auto;
+    }
+  }
+  .hero__phone {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.625rem;
+    margin-top: 1.5rem;
+    font-weight: 900;
+    font-size: var(--fs-xl);
+    letter-spacing: 0.01em;
+  }
+  .hero__phone svg {
+    flex: none;
+    color: var(--yellow);
+  }
+  .hero__phone span {
+    white-space: nowrap;
+  }
+  .hero__phone small {
+    flex-basis: 100%;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--on-dark-muted);
+  }
+  @media (min-width: 480px) {
+    .hero__phone small {
+      flex-basis: auto;
+      margin-left: 0.25rem;
+    }
+  }
+  .hero__badges {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (min-width: 560px) {
+    .hero__badges {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero__badges {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .hero__badge {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 1rem 1.125rem;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-dark);
+    backdrop-filter: blur(6px);
+  }
+  .hero__badge .icon-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+  .hero__badge div {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .hero__badge strong {
+    font-size: var(--fs-sm);
+  }
+  .hero__badge span:not(.icon-badge) {
+    font-size: var(--fs-xs);
+    color: var(--on-dark-muted);
+  }
+</style>

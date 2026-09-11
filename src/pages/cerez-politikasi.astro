@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import { site } from '@data/site';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Çerez Politikası', href: '/cerez-politikasi' },
+];
+---
+
+<BaseLayout title="Çerez Politikası" description="Demir Elektrik web sitesinde kullanılan çerezler ve üçüncü taraf bileşenler hakkında bilgilendirme." schema={[breadcrumbSchema(crumbs)]}>
+  <PageHero title="Çerez Politikası" breadcrumbs={crumbs} showCta={false} />
+  <section class="section">
+    <div class="container prose">
+      <h2>Çerez Nedir?</h2>
+      <p>Çerezler, ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük metin dosyalarıdır.</p>
+
+      <h2>Sitemizde Kullanılan Çerezler</h2>
+      <p>
+        {site.name} web sitesi, kendi adına takip veya reklam çerezi kullanmaz. Sitemiz statik olarak yayınlanır ve ziyaretçi
+        davranışlarını izleyen bir analitik aracı bulunmamaktadır.
+      </p>
+
+      <h2>Üçüncü Taraf Çerezleri</h2>
+      <ul>
+        <li>
+          <strong>Google Haritalar:</strong> İletişim sayfasındaki harita bileşeni yüklendiğinde Google, kendi çerezlerini
+          yerleştirebilir. Bu çerezler Google'ın gizlilik politikasına tabidir.
+        </li>
+      </ul>
+
+      <h2>Çerezleri Yönetme</h2>
+      <p>
+        Tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz. Çerezleri engellemeniz sitemizin temel
+        işlevlerini etkilemez; yalnızca harita bileşeni görüntülenmeyebilir.
+      </p>
+
+      <h2>İletişim</h2>
+      <p>Çerezlerle ilgili sorularınız için <a href={site.phone.href}>{site.phone.display}</a> numarasından bize ulaşabilirsiniz.</p>
+    </div>
+  </section>
+</BaseLayout>

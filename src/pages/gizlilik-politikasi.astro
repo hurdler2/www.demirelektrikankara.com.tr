@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import { site } from '@data/site';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Gizlilik Politikası', href: '/gizlilik-politikasi' },
+];
+---
+
+<BaseLayout title="Gizlilik Politikası" description="Demir Elektrik web sitesi gizlilik politikası: hangi verilerin toplandığı, nasıl kullanıldığı ve korunduğu." schema={[breadcrumbSchema(crumbs)]}>
+  <PageHero title="Gizlilik Politikası" breadcrumbs={crumbs} showCta={false} />
+  <section class="section">
+    <div class="container prose">
+      <p>
+        {site.legalName} olarak web sitemizi ziyaret eden kullanıcıların gizliliğine önem veriyoruz. Bu politika, web sitemiz
+        üzerinden hangi bilgilerin toplandığını ve bu bilgilerin nasıl kullanıldığını açıklar.
+      </p>
+
+      <h2>Toplanan Bilgiler</h2>
+      <p>
+        Web sitemizi yalnızca gezdiğinizde kişisel bilgi toplamayız. İletişim formunu doldurduğunuzda ya da telefon / WhatsApp
+        üzerinden bize ulaştığınızda paylaştığınız ad, telefon, ilçe ve talep bilgileri yalnızca talebinizi yanıtlamak için
+        kullanılır.
+      </p>
+
+      <h2>Form Gönderimleri</h2>
+      <p>
+        İletişim formu, bilgilerinizi WhatsApp üzerinden bize iletmek üzere hazırlanmıştır. Form verileri web sitemizin
+        sunucusunda saklanmaz; gönderim WhatsApp uygulaması üzerinden sizin onayınızla gerçekleşir.
+      </p>
+
+      <h2>Üçüncü Taraf Hizmetler</h2>
+      <p>
+        İletişim sayfamızda konumumuzu göstermek için Google Haritalar kullanılmaktadır. Google, harita bileşeni yüklendiğinde
+        kendi gizlilik politikası kapsamında veri toplayabilir. WhatsApp iletişimi, WhatsApp'ın gizlilik politikasına tabidir.
+      </p>
+
+      <h2>Güvenlik</h2>
+      <p>Paylaştığınız bilgilerin yetkisiz erişime karşı korunması için makul teknik ve idari önlemleri alıyoruz.</p>
+
+      <h2>Değişiklikler</h2>
+      <p>Bu politika gerektiğinde güncellenebilir. Güncel sürüm her zaman bu sayfada yayınlanır.</p>
+
+      <h2>İletişim</h2>
+      <p>
+        Gizlilik ile ilgili sorularınız için <a href={site.phone.href}>{site.phone.display}</a> numaralı telefondan bize ulaşabilirsiniz.
+        Kişisel verilerinize ilişkin haklarınız için <a href="/kvkk-aydinlatma-metni">KVKK Aydınlatma Metni</a> sayfasını inceleyebilirsiniz.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,28 @@
+{
+  "name": "demir-elektrik",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Demir Elektrik - Ankara kurumsal web sitesi",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/generate-images.mjs && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "images": "node scripts/generate-images.mjs",
+    "package": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package.ps1"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "@fontsource-variable/inter": "^5.1.0",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "sharp": "^0.33.5",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,122 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+import PhoneButton from './PhoneButton.astro';
+
+interface Props {
+  /** Tam sayfa varyantında başlık h1 olur */
+  headingLevel?: 'h1' | 'h2';
+  showLink?: boolean;
+}
+const { headingLevel: Tag = 'h2', showLink = true } = Astro.props;
+---
+
+<section class="section about" id="hakkimizda" aria-labelledby="about-title">
+  <div class="container about__inner">
+    <div class="about__content">
+      <span class="section-title__eyebrow">Hakkımızda</span>
+      <Tag id="about-title">15 Yıllık Elektrik Tecrübesi</Tag>
+      <div class="about__text">
+        <p>
+          Demir Elektrik, Ankara'da konut, ticari işletme ve endüstriyel tesislerin elektrik ihtiyaçlarına yönelik profesyonel
+          çözümler sunmaktadır.
+        </p>
+        <p>
+          15 yılı aşkın sektör tecrübemizle elektrik arıza hizmetlerinden komple elektrik tesisatlarına, fabrika elektrik
+          panolarından iş makineleri elektrik otomasyonlarına ve aydınlatma sistemlerine kadar geniş bir alanda hizmet
+          veriyoruz.
+        </p>
+        <p>
+          Sincan merkezli firmamızla Ankara'nın tüm ilçelerinde müşterilerimize güvenilir, kaliteli ve profesyonel elektrik
+          hizmeti sunmayı amaçlıyoruz.
+        </p>
+      </div>
+      <div class="btn-group about__actions">
+        <PhoneButton />
+        {showLink && <a href="/hakkimizda" class="btn btn--outline">Kurumsal <Icon name="arrow-right" size={18} /></a>}
+      </div>
+    </div>
+    <aside class="about__card reveal">
+      <div class="about__card-head">
+        <span class="about__years">15<sup>+</sup></span>
+        <span>yıllık sektör tecrübesi</span>
+      </div>
+      <ul class="about__facts">
+        <li><Icon name="map-pin" size={18} /> <span><strong>Merkez:</strong> {site.address.district} / {site.address.city}</span></li>
+        <li><Icon name="navigation" size={18} /> <span><strong>Hizmet bölgesi:</strong> {site.serviceArea}</span></li>
+        <li><Icon name="clock" size={18} /> <span><strong>Çalışma saatleri:</strong> {site.hours.daysText} {site.hours.display}</span></li>
+        <li><Icon name="layers" size={18} /> <span><strong>Alanlar:</strong> Konut, ticari ve endüstriyel elektrik</span></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .about__inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 960px) {
+    .about__inner {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 4rem;
+    }
+  }
+  .about__text {
+    margin-top: 1.25rem;
+    color: #344054;
+    font-size: var(--fs-md);
+    max-width: 62ch;
+  }
+  .about__actions {
+    margin-top: 1.75rem;
+  }
+  .about__card {
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    background: var(--primary-dark);
+    color: var(--white);
+    background-image: radial-gradient(70% 60% at 100% 0%, rgba(255, 193, 7, 0.18), transparent 60%);
+  }
+  .about__card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-dark);
+    color: var(--on-dark);
+    font-weight: 600;
+  }
+  .about__years {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--yellow);
+    letter-spacing: -0.04em;
+  }
+  .about__years sup {
+    font-size: 1.5rem;
+    top: -1.2em;
+  }
+  .about__facts {
+    display: grid;
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+    font-size: var(--fs-sm);
+    color: var(--on-dark);
+  }
+  .about__facts li {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+  }
+  .about__facts svg {
+    flex: none;
+    color: var(--yellow);
+    margin-top: 2px;
+  }
+  .about__facts strong {
+    color: var(--white);
+  }
+</style>

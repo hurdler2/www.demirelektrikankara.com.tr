@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import About from '@components/About.astro';
+import WhyUs from '@components/WhyUs.astro';
+import Areas from '@components/Areas.astro';
+import Process from '@components/Process.astro';
+import Stats from '@components/Stats.astro';
+import CTASection from '@components/CTASection.astro';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Kurumsal', href: '/hakkimizda' },
+];
+---
+
+<BaseLayout
+  title="Hakkımızda | 15+ Yıllık Ankara Elektrik Tecrübesi | Demir Elektrik"
+  rawTitle
+  description="Demir Elektrik, Sincan merkezli olarak Ankara genelinde konut, ticari ve endüstriyel elektrik hizmetleri sunan 15 yılı aşkın tecrübeye sahip bir elektrik hizmet firmasıdır."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    title="Kurumsal"
+    text="Sincan merkezli, Ankara'nın tüm ilçelerine hizmet veren; konut, ticari ve endüstriyel elektrik işlerinde 15 yılı aşkın tecrübeye sahip bir ekip."
+    breadcrumbs={crumbs}
+    eyebrow="Hakkımızda"
+  />
+  <About headingLevel="h2" showLink={false} />
+  <Stats />
+  <WhyUs />
+  <Areas />
+  <Process />
+  <CTASection title="Elektrik işiniz için bize ulaşın" text="Ev, iş yeri ya da fabrikanız için elektrik hizmeti almak üzere Demir Elektrik ile iletişime geçin." buttonLabel="Hemen Ara" />
+</BaseLayout>

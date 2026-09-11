@@ -1,0 +1,125 @@
+---
+import { allDistricts, landingDistricts } from '@data/districts';
+import Icon from './Icon.astro';
+import DistrictCard from './DistrictCard.astro';
+import SectionTitle from './SectionTitle.astro';
+
+interface Props {
+  headingLevel?: 'h1' | 'h2';
+  showLink?: boolean;
+}
+const { headingLevel = 'h2', showLink = true } = Astro.props;
+---
+
+<section class="section section--gray districts" id="hizmet-bolgeleri" aria-labelledby="districts-title">
+  <div class="container">
+    <SectionTitle as={headingLevel} eyebrow="Yerel hizmet" title="Ankara'nın Tüm İlçelerine Elektrik Hizmeti" text="Demir Elektrik olarak Sincan merkezli olmak üzere Ankara'nın merkez ve çevre ilçelerinde elektrik arıza, elektrik tesisatı, pano montajı, aydınlatma ve otomasyon hizmetleri sunuyoruz." />
+
+    <h3 class="districts__sub"><Icon name="zap" size={18} /> Öne çıkan hizmet bölgelerimiz</h3>
+    <ul class="districts__featured">
+      {
+        landingDistricts.map((d) => (
+          <li>
+            <a href={`/hizmet-bolgeleri/${d.slug}`} class="districts__card reveal">
+              <span class="icon-badge"><Icon name="map-pin" size={22} /></span>
+              <span class="districts__name">{d.content.h1}</span>
+              <span class="districts__arrow"><Icon name="arrow-right" size={18} /></span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="districts__sub"><Icon name="map-pin" size={18} /> Hizmet verdiğimiz tüm ilçeler</h3>
+    <ul class="districts__tags">
+      {allDistricts.map((d) => <li><DistrictCard district={d} /></li>)}
+    </ul>
+
+    {
+      showLink && (
+        <div class="districts__more">
+          <a href="/hizmet-bolgeleri" class="btn btn--dark">
+            Tüm Hizmet Bölgeleri <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .districts__sub {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: var(--fs-base);
+    color: var(--text);
+  }
+  .districts__sub svg {
+    color: var(--orange);
+  }
+  .districts__featured {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    margin-bottom: 2.5rem;
+  }
+  @media (min-width: 560px) {
+    .districts__featured {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 900px) {
+    .districts__featured {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1200px) {
+    .districts__featured {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .districts__card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    font-weight: 700;
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .districts__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: transparent;
+  }
+  .districts__card .icon-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+  .districts__name {
+    flex: 1;
+  }
+  .districts__arrow {
+    color: var(--text-light);
+    transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .districts__card:hover .districts__arrow {
+    color: var(--orange);
+    transform: translateX(3px);
+  }
+  .districts__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .districts__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+</style>

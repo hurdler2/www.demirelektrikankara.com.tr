@@ -1,0 +1,60 @@
+---
+import ContactCard from './ContactCard.astro';
+import ContactForm from './ContactForm.astro';
+import MapEmbed from './MapEmbed.astro';
+import SectionTitle from './SectionTitle.astro';
+
+interface Props {
+  headingLevel?: 'h1' | 'h2';
+  showMap?: boolean;
+}
+const { headingLevel = 'h2', showMap = true } = Astro.props;
+---
+
+<section class="section contact" id="iletisim" aria-labelledby="contact-title">
+  <div class="container">
+    <SectionTitle as={headingLevel} eyebrow="İletişim" title="Bize Ulaşın" text="Telefon veya WhatsApp üzerinden hemen ulaşabilir ya da formu doldurarak talebinizi iletebilirsiniz." />
+    <div class="contact__grid">
+      <ContactCard large />
+      <div class="contact__form card">
+        <h3>Talep Formu</h3>
+        <p class="contact__form-text">Bilgilerinizi bırakın, sizi arayalım.</p>
+        <ContactForm />
+      </div>
+    </div>
+    {
+      showMap && (
+        <div class="contact__map">
+          <MapEmbed />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .contact__grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 2rem;
+    }
+  }
+  .contact__form {
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+  .contact__form h3 {
+    font-size: var(--fs-xl);
+  }
+  .contact__form-text {
+    margin: 0.375rem 0 1.5rem;
+    color: var(--text-gray);
+  }
+  .contact__map {
+    margin-top: 2rem;
+  }
+</style>

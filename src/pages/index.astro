@@ -1,0 +1,89 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import SectionTitle from '@components/SectionTitle.astro';
+import CTASection from '@components/CTASection.astro';
+import WhyUs from '@components/WhyUs.astro';
+import Areas from '@components/Areas.astro';
+import Industrial from '@components/Industrial.astro';
+import Machinery from '@components/Machinery.astro';
+import Lighting from '@components/Lighting.astro';
+import Process from '@components/Process.astro';
+import About from '@components/About.astro';
+import Stats from '@components/Stats.astro';
+import ProjectsGallery from '@components/ProjectsGallery.astro';
+import DistrictsSection from '@components/DistrictsSection.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import ContactSection from '@components/ContactSection.astro';
+import Icon from '@components/Icon.astro';
+import { servicesSorted } from '@data/services';
+import { homeFaq, faq } from '@data/faq';
+import { site } from '@data/site';
+import { faqSchema } from '@utils/seo';
+---
+
+<BaseLayout
+  title="Ankara Elektrikçi | Elektrik Arıza ve Tesisat | Demir Elektrik"
+  rawTitle
+  description={site.description}
+  schema={[faqSchema(faq)]}
+>
+  <Hero />
+
+  <section class="section" id="hizmetler" aria-labelledby="services-title">
+    <div class="container">
+      <SectionTitle
+        align="center"
+        eyebrow="Hizmetlerimiz"
+        title="Hizmetlerimiz"
+        text="Evde çalışmayan bir prizden fabrika pano montajına kadar Ankara genelinde tüm elektrik ihtiyaçlarınız için tek adres."
+      />
+      <div class="grid grid--4">
+        {servicesSorted.map((s, i) => <ServiceCard service={s} delay={i % 4} />)}
+      </div>
+    </div>
+  </section>
+
+  <CTASection />
+
+  <WhyUs />
+
+  <Areas />
+
+  <Industrial />
+
+  <Machinery />
+
+  <Lighting />
+
+  <Process />
+
+  <About />
+
+  <Stats />
+
+  <ProjectsGallery limit={4} showFilters={false} showLink />
+
+  <DistrictsSection />
+
+  <section class="section" id="sss" aria-labelledby="faq-title">
+    <div class="container container--narrow">
+      <SectionTitle align="center" eyebrow="Merak edilenler" title="Sık Sorulan Sorular" />
+      <FAQAccordion items={homeFaq} />
+      <div class="faq-more">
+        <a href="/sss" class="btn btn--outline">Tüm Sorular <Icon name="arrow-right" size={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <ContactSection />
+</BaseLayout>
+
+<style>
+  .faq-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+</style>

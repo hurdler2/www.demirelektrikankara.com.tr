@@ -1,0 +1,226 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import CTASection from '@components/CTASection.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import Process from '@components/Process.astro';
+import Icon from '@components/Icon.astro';
+import { landingDistricts, type District, type DistrictContent } from '@data/districts';
+import { getService } from '@data/services';
+import { site } from '@data/site';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '@utils/seo';
+
+export function getStaticPaths() {
+  return landingDistricts.map((d) => ({ params: { slug: d.slug }, props: { district: d } }));
+}
+
+interface Props {
+  district: District & { content: DistrictContent };
+}
+const { district } = Astro.props;
+const c = district.content;
+const path = `/hizmet-bolgeleri/${district.slug}`;
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Hizmet Bölgeleri', href: '/hizmet-bolgeleri' },
+  { name: c.h1, href: path },
+];
+const highlighted = c.highlightedServices.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
+const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
+---
+
+<BaseLayout
+  title={c.seoTitle}
+  rawTitle
+  description={c.seoDescription}
+  schema={[
+    breadcrumbSchema(crumbs),
+    serviceSchema({ name: `${district.name} Elektrikçi`, description: c.seoDescription, path, areaName: district.name }),
+    faqSchema(c.faq),
+  ]}
+>
+  <PageHero title={c.h1} text={c.subtitle} breadcrumbs={crumbs} eyebrow={district.type === 'semt' ? `${district.parent} · Ankara` : 'Ankara'} />
+
+  <article class="section district">
+    <div class="container">
+      <div class="district__intro">
+        <div class="district__text">
+          {c.intro.map((p) => <p>{p}</p>)}
+        </div>
+        <aside class="district__facts">
+          <h2>{district.name} için hızlı bilgi</h2>
+          <ul>
+            <li><Icon name="phone" size={18} /> <a href={site.phone.href}>{site.phone.display}</a></li>
+            <li><Icon name="clock" size={18} /> {site.hours.daysText} {site.hours.display}</li>
+            <li><Icon name="map-pin" size={18} /> Merkez: {site.address.district} / {site.address.city}</li>
+            <li><Icon name="award" size={18} /> 15+ yıllık tecrübe</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <section class="section section--gray" aria-labelledby="dist-services">
+    <div class="container">
+      <div class="section-title">
+        <span class="section-title__eyebrow">Öne çıkan hizmetler</span>
+        <h2 id="dist-services">{district.name}'da En Çok Talep Edilen Hizmetler</h2>
+      </div>
+      <div class="grid grid--4">
+        {highlighted.map((s, i) => <ServiceCard service={s} delay={i} />)}
+      </div>
+      <p class="district__all-services"><a href="/hizmetler" class="btn btn--outline">Tüm Hizmetler <Icon name="arrow-right" size={18} /></a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="dist-notes">
+    <div class="container">
+      <div class="section-title">
+        <span class="section-title__eyebrow">Bölgeye özel</span>
+        <h2 id="dist-notes">{district.name}'da Nasıl Çalışıyoruz?</h2>
+      </div>
+      <div class="grid grid--3">
+        {
+          c.localNotes.map((n, i) => (
+            <div class="card reveal" data-delay={i}>
+              <span class="icon-badge"><Icon name="zap" size={22} /></span>
+              <h3 class="district__note-title">{n.title}</h3>
+              <p class="district__note-text">{n.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="district__hoods">
+        <h3><Icon name="map-pin" size={18} /> {district.name}'da hizmet verdiğimiz bölgeler</h3>
+        <ul>
+          {c.neighborhoods.map((n) => <li class="tag tag--muted">{n}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Process title={`${district.name}'da Arıza ve Tesisat Süreci`} />
+
+  <section class="section section--gray" aria-labelledby="dist-faq">
+    <div class="container container--narrow">
+      <div class="section-title section-title--center">
+        <span class="section-title__eyebrow">Sık sorulanlar</span>
+        <h2 id="dist-faq">{district.name} Elektrikçi Hakkında Sorular</h2>
+      </div>
+      <FAQAccordion items={c.faq} />
+    </div>
+  </section>
+
+  <CTASection title={`${district.name}'da elektrik arızanız mı var?`} text={`${district.name} ve çevresinde elektrik arıza, tesisat, pano ve aydınlatma hizmeti için Demir Elektrik'i arayın.`} />
+
+  <section class="section" aria-labelledby="other-districts">
+    <div class="container">
+      <h2 id="other-districts" class="district__other-title">Diğer Hizmet Bölgelerimiz</h2>
+      <ul class="district__other">
+        {
+          otherDistricts.map((d) => (
+            <li>
+              <a href={`/hizmet-bolgeleri/${d.slug}`} class="tag"><Icon name="map-pin" size={14} /> {d.content.h1}</a>
+            </li>
+          ))
+        }
+        <li><a href="/hizmet-bolgeleri" class="tag tag--muted">Tüm ilçeler <Icon name="arrow-right" size={14} /></a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .district__intro {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .district__intro {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 3.5rem;
+    }
+  }
+  .district__text {
+    color: #344054;
+    font-size: var(--fs-md);
+    max-width: 68ch;
+  }
+  .district__facts {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--primary-dark);
+    color: var(--white);
+    background-image: radial-gradient(70% 60% at 100% 0%, rgba(255, 193, 7, 0.18), transparent 60%);
+  }
+  .district__facts h2 {
+    font-size: var(--fs-base);
+    margin-bottom: 1rem;
+  }
+  .district__facts ul {
+    display: grid;
+    gap: 0.75rem;
+    font-size: var(--fs-sm);
+    color: var(--on-dark);
+  }
+  .district__facts li {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .district__facts svg {
+    color: var(--yellow);
+    flex: none;
+  }
+  .district__facts a {
+    font-weight: 800;
+    font-size: var(--fs-lg);
+    color: var(--white);
+  }
+  .district__all-services {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .district__note-title {
+    margin-top: 1rem;
+  }
+  .district__note-text {
+    margin-top: 0.5rem;
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+  }
+  .district__hoods {
+    margin-top: 2.5rem;
+  }
+  .district__hoods h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-base);
+    margin-bottom: 0.875rem;
+  }
+  .district__hoods svg {
+    color: var(--orange);
+  }
+  .district__hoods ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .district__other-title {
+    font-size: var(--fs-lg);
+    margin-bottom: 1rem;
+  }
+  .district__other {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .district__other svg {
+    color: var(--orange);
+  }
+</style>

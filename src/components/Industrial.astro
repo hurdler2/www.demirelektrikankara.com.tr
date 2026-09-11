@@ -1,0 +1,117 @@
+---
+import { industrialServices } from '@data/site';
+import Icon from './Icon.astro';
+import PhoneButton from './PhoneButton.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+---
+
+<section class="section industrial" id="fabrika-elektrik" aria-labelledby="industrial-title">
+  <div class="container industrial__inner">
+    <div class="industrial__content">
+      <span class="section-title__eyebrow industrial__eyebrow">Endüstriyel çözümler</span>
+      <h2 id="industrial-title">Fabrika Elektrik ve Otomasyon Çözümleri</h2>
+      <p class="industrial__text">
+        Fabrika, üretim tesisi ve endüstriyel işletmeler için elektrik tesisatı, pano sistemleri, motor bağlantıları, kontrol
+        sistemleri ve elektrik otomasyon hizmetleri sunuyoruz.
+      </p>
+      <div class="industrial__actions">
+        <a href="/hizmetler/fabrika-elektrik" class="btn btn--primary"><Icon name="factory" size={18} /> Fabrika Elektrik</a>
+        <a href="/hizmetler/elektrik-pano-montaji" class="btn btn--outline-light"><Icon name="circuit-board" size={18} /> Pano Montajı</a>
+      </div>
+      <div class="industrial__contact">
+        <PhoneButton variant="outline-light" showNumber />
+        <WhatsAppLink label="Teknik görüşme için yazın" />
+      </div>
+    </div>
+    <ul class="industrial__list">
+      {
+        industrialServices.map((s, i) => (
+          <li class="reveal" data-delay={i % 3}>
+            <Icon name="check" size={16} />
+            {s}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .industrial {
+    position: relative;
+    background:
+      linear-gradient(90deg, rgba(23, 32, 51, 0.98), rgba(11, 18, 32, 0.98)),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 14px);
+    color: var(--white);
+    border-top: 4px solid var(--orange);
+  }
+  .industrial::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    pointer-events: none;
+  }
+  .industrial__inner {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .industrial__inner {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .industrial__eyebrow {
+    color: var(--yellow);
+  }
+  .industrial__text {
+    margin-top: 1rem;
+    color: var(--on-dark);
+    font-size: var(--fs-md);
+    max-width: 56ch;
+  }
+  .industrial__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .industrial__contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-dark);
+  }
+  .industrial__list {
+    display: grid;
+    gap: 0.625rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 560px) {
+    .industrial__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .industrial__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-dark);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+  .industrial__list svg {
+    flex: none;
+    color: var(--orange);
+  }
+</style>

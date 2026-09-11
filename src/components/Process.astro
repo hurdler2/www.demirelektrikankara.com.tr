@@ -1,0 +1,79 @@
+---
+import { processSteps } from '@data/site';
+import Icon from './Icon.astro';
+import SectionTitle from './SectionTitle.astro';
+
+interface Props {
+  /** Hizmete özel adımlar (varsayılan: genel süreç) */
+  steps?: { title: string; text: string; icon?: string }[];
+  title?: string;
+  eyebrow?: string;
+}
+const { steps = processSteps, title = 'Nasıl Çalışıyoruz?', eyebrow = 'Çalışma süreci' } = Astro.props;
+const defaultIcons = ['phone', 'clipboard-list', 'wrench', 'check-circle'];
+---
+
+<section class="section process" aria-labelledby="process-title">
+  <div class="container">
+    <SectionTitle align="center" eyebrow={eyebrow} title={title} text="Dört adımda, sürprizsiz ve düzenli bir süreç." />
+    <ol class="process__steps">
+      {
+        steps.map((s, i) => (
+          <li class="process__step reveal" data-delay={i}>
+            <span class="process__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="icon-badge"><Icon name={s.icon ?? defaultIcons[i] ?? 'check'} /></span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process__steps {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    counter-reset: step;
+  }
+  @media (min-width: 640px) {
+    .process__steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .process__steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .process__step {
+    position: relative;
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    overflow: hidden;
+  }
+  .process__num {
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--gray-100);
+    letter-spacing: -0.04em;
+  }
+  .process__step h3,
+  .process__step p {
+    position: relative;
+  }
+  .process__step p {
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+  }
+</style>

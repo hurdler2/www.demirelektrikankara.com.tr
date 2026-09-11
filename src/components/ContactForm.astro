@@ -1,0 +1,254 @@
+---
+import { site, formServiceOptions } from '@data/site';
+import { allDistricts } from '@data/districts';
+import Icon from './Icon.astro';
+
+/**
+ * İletişim formu.
+ * Backend olmadan çalışır: doğrulama sonrası talep, WhatsApp'a ön-yazılı mesaj olarak yönlendirilir.
+ * Backend eklendiğinde: form `action` ve `method` ayarlanıp `data-mode="post"` yapılması yeterlidir;
+ * client-side doğrulama ve honeypot aynen kullanılabilir.
+ */
+---
+
+<form class="cform" id="contact-form" novalidate data-mode="whatsapp" data-wa={site.whatsapp.number} action="#" method="post">
+  <div class="cform__row">
+    <div class="cform__field">
+      <label for="cf-name">Ad Soyad <span aria-hidden="true">*</span></label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required minlength="3" maxlength="80" placeholder="Adınız Soyadınız" />
+      <span class="cform__error" data-error-for="cf-name"></span>
+    </div>
+    <div class="cform__field">
+      <label for="cf-phone">Telefon <span aria-hidden="true">*</span></label>
+      <input id="cf-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="^[0-9+()\s-]{10,20}$" placeholder="05xx xxx xx xx" />
+      <span class="cform__error" data-error-for="cf-phone"></span>
+    </div>
+  </div>
+
+  <div class="cform__row">
+    <div class="cform__field">
+      <label for="cf-district">İlçe <span aria-hidden="true">*</span></label>
+      <select id="cf-district" name="district" required>
+        <option value="">Seçiniz</option>
+        {allDistricts.map((d) => <option value={d.name}>{d.name}</option>)}
+        <option value="Ankara dışı">Diğer</option>
+      </select>
+      <span class="cform__error" data-error-for="cf-district"></span>
+    </div>
+    <div class="cform__field">
+      <label for="cf-service">Hizmet Türü <span aria-hidden="true">*</span></label>
+      <select id="cf-service" name="service" required>
+        <option value="">Seçiniz</option>
+        {formServiceOptions.map((s) => <option value={s}>{s}</option>)}
+      </select>
+      <span class="cform__error" data-error-for="cf-service"></span>
+    </div>
+  </div>
+
+  <div class="cform__field">
+    <label for="cf-message">Mesaj</label>
+    <textarea id="cf-message" name="message" rows="4" maxlength="800" placeholder="Arızayı ya da yapılmasını istediğiniz işi kısaca anlatın."></textarea>
+  </div>
+
+  <!-- Honeypot: botlar doldurur, kullanıcılar görmez -->
+  <div class="cform__hp" aria-hidden="true">
+    <label for="cf-website">Web sitesi</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="cform__field cform__consent">
+    <input id="cf-consent" name="consent" type="checkbox" required />
+    <label for="cf-consent">
+      Kişisel verilerimin iletişim talebimin yanıtlanması amacıyla işlenmesini kabul ediyorum.
+      <a href="/kvkk-aydinlatma-metni" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>
+    </label>
+    <span class="cform__error" data-error-for="cf-consent"></span>
+  </div>
+
+  <button type="submit" class="btn btn--primary btn--lg cform__submit">
+    <Icon name="send" size={20} /> Talep Gönder
+  </button>
+  <p class="cform__note">Talebiniz WhatsApp üzerinden bize iletilir. Acil durumlar için doğrudan <a href={site.phone.href}>{site.phone.display}</a> numarasını arayabilirsiniz.</p>
+  <p class="cform__status" role="status" aria-live="polite" data-status></p>
+</form>
+
+<style>
+  .cform {
+    display: grid;
+    gap: 1rem;
+  }
+  .cform__row {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 560px) {
+    .cform__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .cform__field {
+    display: grid;
+    gap: 0.375rem;
+  }
+  .cform label {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+  }
+  .cform label span {
+    color: var(--orange);
+  }
+  .cform input:not([type='checkbox']),
+  .cform select,
+  .cform textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem 0.875rem;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .cform textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  .cform input:focus,
+  .cform select:focus,
+  .cform textarea:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.15);
+  }
+  .cform .is-invalid {
+    border-color: #d92d20 !important;
+  }
+  .cform__error {
+    min-height: 1em;
+    font-size: var(--fs-xs);
+    color: #d92d20;
+    font-weight: 600;
+  }
+  .cform__error:empty {
+    display: none;
+  }
+  .cform__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .cform__consent {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    column-gap: 0.625rem;
+  }
+  .cform__consent input {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    accent-color: var(--orange);
+  }
+  .cform__consent label {
+    font-weight: 500;
+    font-size: var(--fs-sm);
+    color: var(--text-gray);
+  }
+  .cform__consent label a {
+    color: var(--orange);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .cform__consent .cform__error {
+    grid-column: 1 / -1;
+  }
+  .cform__submit {
+    justify-self: start;
+  }
+  .cform__note {
+    font-size: var(--fs-xs);
+    color: var(--text-gray);
+  }
+  .cform__note a {
+    font-weight: 700;
+    color: var(--text);
+  }
+  .cform__status:empty {
+    display: none;
+  }
+  .cform__status {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: #ecfdf3;
+    color: #027a48;
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const setError = (id: string, msg: string) => {
+      const field = form.querySelector<HTMLElement>(`#${id}`);
+      const box = form.querySelector<HTMLElement>(`[data-error-for="${id}"]`);
+      field?.classList.toggle('is-invalid', Boolean(msg));
+      field?.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (box) box.textContent = msg;
+    };
+
+    const clean = (v: string) => v.replace(/[<>]/g, '').trim();
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (status) status.textContent = '';
+
+      const fd = new FormData(form);
+      // Honeypot dolu ise sessizce çık
+      if (String(fd.get('website') ?? '').length > 0) return;
+
+      const name = clean(String(fd.get('name') ?? ''));
+      const phone = clean(String(fd.get('phone') ?? ''));
+      const district = clean(String(fd.get('district') ?? ''));
+      const service = clean(String(fd.get('service') ?? ''));
+      const message = clean(String(fd.get('message') ?? '')).slice(0, 800);
+      const consent = fd.get('consent') === 'on';
+
+      let ok = true;
+      const req = (cond: boolean, id: string, msg: string) => {
+        setError(id, cond ? '' : msg);
+        if (!cond) ok = false;
+      };
+      req(name.length >= 3, 'cf-name', 'Lütfen adınızı ve soyadınızı yazın.');
+      req(/^[0-9+()\s-]{10,20}$/.test(phone), 'cf-phone', 'Geçerli bir telefon numarası girin.');
+      req(district.length > 0, 'cf-district', 'Lütfen ilçe seçin.');
+      req(service.length > 0, 'cf-service', 'Lütfen hizmet türü seçin.');
+      req(consent, 'cf-consent', 'Devam etmek için onay vermeniz gerekir.');
+      if (!ok) {
+        form.querySelector<HTMLElement>('.is-invalid')?.focus();
+        return;
+      }
+
+      if (form.dataset.mode === 'whatsapp') {
+        const lines = [
+          'Merhaba Demir Elektrik, web sitesi üzerinden talep gönderiyorum.',
+          '',
+          `Ad Soyad: ${name}`,
+          `Telefon: ${phone}`,
+          `İlçe: ${district}`,
+          `Hizmet Türü: ${service}`,
+          message ? `Mesaj: ${message}` : '',
+        ].filter((l) => l !== undefined);
+        const url = `https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`;
+        window.open(url, '_blank', 'noopener');
+        if (status) status.textContent = 'Talebiniz WhatsApp üzerinden iletilmek üzere hazırlandı. Açılan pencerede "Gönder" tuşuna basmanız yeterli.';
+        form.reset();
+      } else {
+        form.submit();
+      }
+    });
+  }
+</script>

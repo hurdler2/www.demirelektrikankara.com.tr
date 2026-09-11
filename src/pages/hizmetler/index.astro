@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import CTASection from '@components/CTASection.astro';
+import SectionTitle from '@components/SectionTitle.astro';
+import { servicesSorted, serviceCategoryLabels, type ServiceCategory } from '@data/services';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Hizmetlerimiz', href: '/hizmetler' },
+];
+
+const order: ServiceCategory[] = ['ariza', 'konut', 'ticari', 'endustriyel', 'aydinlatma'];
+const groups = order.map((cat) => ({
+  cat,
+  label: serviceCategoryLabels[cat],
+  items: servicesSorted.filter((s) => s.category === cat),
+}));
+---
+
+<BaseLayout
+  title="Hizmetlerimiz | Ankara Elektrik Arıza, Tesisat, Pano ve Aydınlatma"
+  rawTitle
+  description="Demir Elektrik'in Ankara genelindeki tüm elektrik hizmetleri: elektrik arıza, ev, villa, bina ve mağaza tesisatı, fabrika elektrik, pano montajı, iş makinesi otomasyonu, LED, spot ve avize montajı."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    title="Hizmetlerimiz"
+    text="Ankara genelinde konut, ticari ve endüstriyel elektrik hizmetleri. Küçük bir arızadan komple tesisata kadar tüm ihtiyaçlarınız için tek numara."
+    breadcrumbs={crumbs}
+    eyebrow="Elektrik hizmetleri"
+  />
+
+  {
+    groups.map((g, gi) => (
+      <section class:list={['section', { 'section--gray': gi % 2 === 1 }]} aria-labelledby={`cat-${g.cat}`}>
+        <div class="container">
+          <SectionTitle title={g.label} />
+          <div class="grid grid--3">
+            {g.items.map((s, i) => (
+              <ServiceCard service={s} headingLevel="h3" delay={i % 3} />
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <CTASection />
+</BaseLayout>

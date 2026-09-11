@@ -1,0 +1,75 @@
+---
+import type { Service } from '@data/services';
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  service: Service;
+  /** Kart başlığı etiketi */
+  headingLevel?: 'h2' | 'h3';
+  delay?: number;
+}
+const { service, headingLevel: Tag = 'h3', delay = 0 } = Astro.props;
+const href = `/hizmetler/${service.slug}`;
+---
+
+<article class="service-card card card--hover reveal" data-delay={delay || undefined}>
+  <div class="icon-badge"><Icon name={service.icon} /></div>
+  <Tag class="service-card__title"><a href={href}>{service.title}</a></Tag>
+  <p class="service-card__text">{service.excerpt}</p>
+  <div class="service-card__actions">
+    <a href={href} class="service-card__more">
+      Detaylı Bilgi <Icon name="arrow-right" size={16} />
+    </a>
+    <a href={site.phone.href} class="btn btn--primary btn--sm" aria-label={`${service.title} için hemen ara`}>
+      <Icon name="phone" size={16} /> Hemen Ara
+    </a>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+  }
+  .service-card__title {
+    font-size: var(--fs-lg);
+  }
+  .service-card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .service-card {
+    position: relative;
+  }
+  .service-card__text {
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+    flex: 1;
+  }
+  .service-card__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    position: relative;
+    z-index: 1;
+  }
+  .service-card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 700;
+    font-size: var(--fs-sm);
+    color: var(--primary-dark);
+    transition: color var(--dur) var(--ease), gap var(--dur) var(--ease);
+  }
+  .service-card:hover .service-card__more {
+    color: var(--orange);
+    gap: 0.5rem;
+  }
+</style>

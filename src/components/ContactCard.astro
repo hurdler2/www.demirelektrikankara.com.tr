@@ -1,0 +1,109 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+import PhoneButton from './PhoneButton.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+
+interface Props {
+  /** Büyük başlıklı varyant (iletişim sayfası) */
+  large?: boolean;
+}
+const { large = false } = Astro.props;
+---
+
+<div class:list={['contact-card', { 'contact-card--large': large }]}>
+  <p class="contact-card__brand">DEMİR ELEKTRİK</p>
+  <ul class="contact-card__list">
+    <li>
+      <span class="icon-badge icon-badge--dark"><Icon name="phone" /></span>
+      <div>
+        <span class="contact-card__label">Telefon</span>
+        <a href={site.phone.href} class="contact-card__phone">{site.phone.display}</a>
+      </div>
+    </li>
+    <li>
+      <span class="icon-badge icon-badge--dark"><Icon name="map-pin" /></span>
+      <div>
+        <span class="contact-card__label">Adres</span>
+        <address>
+          {site.address.neighborhood}<br />
+          {site.address.line1}<br />
+          {site.address.district} / {site.address.city}
+        </address>
+      </div>
+    </li>
+    <li>
+      <span class="icon-badge icon-badge--dark"><Icon name="clock" /></span>
+      <div>
+        <span class="contact-card__label">Çalışma Saatleri</span>
+        <strong>{site.hours.daysText} {site.hours.display}</strong>
+      </div>
+    </li>
+  </ul>
+  <div class="contact-card__actions">
+    <PhoneButton />
+    <WhatsAppLink />
+    <a href={site.maps.directionsHref} class="btn btn--outline-light" target="_blank" rel="noopener">
+      <Icon name="navigation" size={18} /> Yol Tarifi Al
+    </a>
+  </div>
+</div>
+
+<style>
+  .contact-card {
+    background: var(--primary-dark);
+    color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background-image: radial-gradient(60% 60% at 100% 0%, rgba(255, 193, 7, 0.14), transparent 60%);
+  }
+  .contact-card__brand {
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    font-size: var(--fs-lg);
+    color: var(--yellow);
+  }
+  .contact-card--large .contact-card__brand {
+    font-size: var(--fs-xl);
+  }
+  .contact-card__list {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .contact-card__list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .contact-card__label {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--on-dark-muted);
+    margin-bottom: 0.25rem;
+  }
+  .contact-card__phone {
+    font-size: var(--fs-xl);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+  .contact-card address {
+    font-style: normal;
+    line-height: 1.5;
+    color: var(--on-dark);
+  }
+  .contact-card__actions {
+    display: grid;
+    gap: 0.625rem;
+    margin-top: 1.75rem;
+  }
+  @media (min-width: 480px) {
+    .contact-card__actions {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>

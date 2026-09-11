@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro';
+import type { BreadcrumbItem } from '@utils/seo';
+
+interface Props {
+  items: BreadcrumbItem[];
+  onDark?: boolean;
+}
+const { items, onDark = true } = Astro.props;
+---
+
+<nav class:list={['breadcrumb', { 'breadcrumb--dark': onDark }]} aria-label="Sayfa yolu">
+  <ol>
+    {
+      items.map((item, i) => {
+        const last = i === items.length - 1;
+        return (
+          <li>
+            {i > 0 && <Icon name="chevron-right" size={14} class="breadcrumb__sep" />}
+            {last ? <span aria-current="page">{item.name}</span> : <a href={item.href}>{item.name}</a>}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .breadcrumb a {
+    color: var(--text-gray);
+    transition: color var(--dur) var(--ease);
+  }
+  .breadcrumb a:hover {
+    color: var(--orange);
+  }
+  .breadcrumb [aria-current] {
+    color: var(--text);
+  }
+  .breadcrumb__sep {
+    color: var(--text-light);
+  }
+  .breadcrumb--dark a {
+    color: var(--on-dark-muted);
+  }
+  .breadcrumb--dark a:hover {
+    color: var(--yellow);
+  }
+  .breadcrumb--dark [aria-current] {
+    color: var(--yellow);
+  }
+</style>

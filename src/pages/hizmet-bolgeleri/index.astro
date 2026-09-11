@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import DistrictsSection from '@components/DistrictsSection.astro';
+import CTASection from '@components/CTASection.astro';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Hizmet Bölgeleri', href: '/hizmet-bolgeleri' },
+];
+---
+
+<BaseLayout
+  title="Hizmet Bölgeleri | Ankara'nın Tüm İlçelerine Elektrikçi | Demir Elektrik"
+  rawTitle
+  description="Demir Elektrik; Sincan, Etimesgut, Eryaman, Yenimahalle, Batıkent, Çankaya, Keçiören, Mamak, Gölbaşı, Pursaklar, Kahramankazan ve Ankara'nın tüm ilçelerinde elektrik arıza, tesisat, pano ve aydınlatma hizmeti sunar."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    title="Ankara Hizmet Bölgeleri"
+    text="Merkezimiz Sincan'da. Ankara'nın 25 ilçesinin tamamına elektrik arıza, tesisat, pano, otomasyon ve aydınlatma hizmeti veriyoruz."
+    breadcrumbs={crumbs}
+    eyebrow="Yerel hizmet"
+  />
+  <DistrictsSection headingLevel="h2" showLink={false} />
+  <CTASection title="Bulunduğunuz ilçeye geliyoruz" text="Ankara'nın hangi ilçesinde olursanız olun, elektrik arızası ve tesisat işleri için bizi arayabilirsiniz." />
+</BaseLayout>

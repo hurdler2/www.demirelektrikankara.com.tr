@@ -1,0 +1,40 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+---
+
+<a href={site.whatsapp.href} class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp üzerinden yazın">
+  <Icon name="whatsapp" size={28} />
+  <span class="wa-float__label">WhatsApp'tan Yaz</span>
+</a>
+
+<style>
+  .wa-float {
+    display: none;
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 90;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.125rem;
+    border-radius: 999px;
+    background: var(--success);
+    color: var(--white);
+    font-weight: 700;
+    font-size: var(--fs-sm);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.35);
+    transition:
+      transform var(--dur) var(--ease),
+      background-color var(--dur) var(--ease);
+  }
+  .wa-float:hover {
+    background: var(--success-dark);
+    transform: translateY(-3px);
+  }
+  @media (min-width: 768px) {
+    .wa-float {
+      display: inline-flex;
+    }
+  }
+</style>

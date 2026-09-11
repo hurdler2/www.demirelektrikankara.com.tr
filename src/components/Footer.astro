@@ -1,0 +1,196 @@
+---
+import { site } from '@data/site';
+import { servicesSorted } from '@data/services';
+import { featuredDistricts } from '@data/districts';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+
+const footerServices = servicesSorted.filter((s) =>
+  ['elektrik-ariza', 'elektrik-tesisati', 'fabrika-elektrik', 'elektrik-pano-montaji', 'is-makinesi-elektrik-otomasyonu', 'led-aydinlatma', 'spot-montaji', 'avize-montaji'].includes(s.slug),
+);
+const footerDistricts = featuredDistricts.filter((d) => ['Sincan', 'Etimesgut', 'Eryaman', 'Yenimahalle', 'Çankaya', 'Keçiören', 'Mamak', 'Gölbaşı'].includes(d.name));
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__col footer__brand">
+        <Logo size="md" />
+        <p class="footer__desc">Ankara genelinde profesyonel elektrik tesisatı, arıza, pano, otomasyon ve aydınlatma hizmetleri.</p>
+        <div class="footer__badges">
+          <span><Icon name="award" size={16} /> 15+ yıllık tecrübe</span>
+          <span><Icon name="clock" size={16} /> {site.hours.daysText} {site.hours.display}</span>
+        </div>
+      </div>
+
+      <nav class="footer__col" aria-label="Hizmetlerimiz">
+        <h2 class="footer__title">Hizmetlerimiz</h2>
+        <ul class="footer__list">
+          {footerServices.map((s) => (
+            <li><a href={`/hizmetler/${s.slug}`}>{s.shortTitle}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="footer__col" aria-label="Hizmet bölgeleri">
+        <h2 class="footer__title">Hizmet Bölgeleri</h2>
+        <ul class="footer__list">
+          {footerDistricts.map((d) => (
+            <li><a href={`/hizmet-bolgeleri/${d.slug}`}>{d.name}</a></li>
+          ))}
+          <li><a href="/hizmet-bolgeleri">Ankara Geneli</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__col">
+        <h2 class="footer__title">İletişim</h2>
+        <ul class="footer__contact">
+          <li>
+            <Icon name="phone" size={18} />
+            <a href={site.phone.href} class="footer__phone">{site.phone.display}</a>
+          </li>
+          <li>
+            <Icon name="map-pin" size={18} />
+            <address>
+              {site.address.neighborhood}<br />
+              {site.address.line1}<br />
+              {site.address.district} / {site.address.city}
+            </address>
+          </li>
+          <li>
+            <Icon name="clock" size={18} />
+            <span>{site.hours.daysText} {site.hours.display}</span>
+          </li>
+        </ul>
+        <div class="footer__actions">
+          <a href={site.phone.href} class="btn btn--primary btn--sm"><Icon name="phone" size={16} /> Hemen Ara</a>
+          <a href={site.whatsapp.href} class="btn btn--whatsapp btn--sm" target="_blank" rel="noopener"><Icon name="whatsapp" size={16} /> WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {site.name}. Tüm Hakları Saklıdır.</p>
+      <ul class="footer__legal">
+        <li><a href="/kvkk-aydinlatma-metni">KVKK Aydınlatma Metni</a></li>
+        <li><a href="/gizlilik-politikasi">Gizlilik Politikası</a></li>
+        <li><a href="/cerez-politikasi">Çerez Politikası</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--primary-dark);
+    color: var(--on-dark);
+    padding-block: 3.5rem 2rem;
+    border-top: 3px solid var(--yellow);
+  }
+  .footer__grid {
+    display: grid;
+    gap: 2.5rem 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .footer__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    }
+  }
+  .footer__desc {
+    margin-top: 1.25rem;
+    max-width: 34ch;
+    font-size: var(--fs-sm);
+  }
+  .footer__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--on-dark-muted);
+  }
+  .footer__badges span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .footer__badges svg {
+    color: var(--yellow);
+  }
+  .footer__title {
+    font-size: var(--fs-base);
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .footer__list {
+    display: grid;
+    gap: 0.5rem;
+    font-size: var(--fs-sm);
+  }
+  .footer__list a {
+    color: var(--on-dark);
+    transition: color var(--dur) var(--ease);
+  }
+  .footer__list a:hover {
+    color: var(--yellow);
+  }
+  .footer__contact {
+    display: grid;
+    gap: 0.875rem;
+    font-size: var(--fs-sm);
+  }
+  .footer__contact li {
+    display: flex;
+    gap: 0.625rem;
+    align-items: flex-start;
+  }
+  .footer__contact svg {
+    flex: none;
+    color: var(--yellow);
+    margin-top: 2px;
+  }
+  .footer__contact address {
+    font-style: normal;
+    line-height: 1.5;
+  }
+  .footer__phone {
+    font-weight: 800;
+    font-size: var(--fs-md);
+    color: var(--white);
+  }
+  .footer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-dark);
+    font-size: var(--fs-xs);
+    color: var(--on-dark-muted);
+  }
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+  .footer__legal a:hover {
+    color: var(--yellow);
+  }
+</style>

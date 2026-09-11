@@ -1,0 +1,51 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+---
+
+<div class="call-bar" role="region" aria-label="Hızlı iletişim">
+  <a href={site.phone.href} class="call-bar__btn call-bar__btn--phone">
+    <Icon name="phone" size={22} />
+    <span>Hemen Ara</span>
+  </a>
+  <a href={site.whatsapp.href} class="call-bar__btn call-bar__btn--wa" target="_blank" rel="noopener">
+    <Icon name="whatsapp" size={22} />
+    <span>WhatsApp</span>
+  </a>
+</div>
+
+<style>
+  .call-bar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    height: var(--mobile-bar-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--primary-dark);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.25);
+  }
+  .call-bar__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: var(--fs-base);
+  }
+  .call-bar__btn--phone {
+    background: var(--yellow);
+    color: var(--primary-dark);
+  }
+  .call-bar__btn--wa {
+    background: var(--success);
+    color: var(--white);
+  }
+  @media (min-width: 768px) {
+    .call-bar {
+      display: none;
+    }
+  }
+</style>

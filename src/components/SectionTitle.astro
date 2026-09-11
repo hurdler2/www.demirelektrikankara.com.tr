@@ -1,0 +1,18 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text?: string;
+  align?: 'left' | 'center';
+  /** Başlık etiketi (varsayılan h2) */
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+const { eyebrow, title, text, align = 'left', as: Tag = 'h2', class: className } = Astro.props;
+---
+
+<div class:list={['section-title', { 'section-title--center': align === 'center' }, className]}>
+  {eyebrow && <span class="section-title__eyebrow">{eyebrow}</span>}
+  <Tag>{title}</Tag>
+  {text && <p class="section-title__text">{text}</p>}
+</div>

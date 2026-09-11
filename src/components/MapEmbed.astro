@@ -1,0 +1,70 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Bölüm sarmalayıcısı ile mi (ana sayfa) yoksa yalın mı */
+  standalone?: boolean;
+}
+const { standalone = true } = Astro.props;
+---
+
+<div class:list={['map', { 'map--standalone': standalone }]}>
+  <div class="map__frame">
+    <iframe
+      src={site.maps.embedSrc}
+      title="Demir Elektrik konumu – Menderes Mahallesi, Alparslan Caddesi No:24, Sincan / Ankara"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <div class="map__bar">
+    <p><Icon name="map-pin" size={18} /> {site.address.full}</p>
+    <a href={site.maps.directionsHref} class="btn btn--dark btn--sm" target="_blank" rel="noopener"><Icon name="navigation" size={16} /> Yol Tarifi Al</a>
+  </div>
+</div>
+
+<style>
+  .map {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+  }
+  .map--standalone {
+    margin-block: 0;
+  }
+  .map__frame {
+    aspect-ratio: 16 / 9;
+    background: var(--gray-100);
+  }
+  @media (min-width: 768px) {
+    .map__frame {
+      aspect-ratio: 21 / 9;
+    }
+  }
+  .map__frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .map__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .map__bar p {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .map__bar svg {
+    color: var(--orange);
+  }
+</style>

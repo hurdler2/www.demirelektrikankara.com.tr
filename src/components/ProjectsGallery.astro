@@ -1,0 +1,271 @@
+---
+import { projects, projectCategories } from '@data/projects';
+import Icon from './Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+import SectionTitle from './SectionTitle.astro';
+
+interface Props {
+  /** Ana sayfada sınırlı sayıda göster */
+  limit?: number;
+  showFilters?: boolean;
+  headingLevel?: 'h1' | 'h2';
+  showLink?: boolean;
+}
+const { limit, showFilters = true, headingLevel = 'h2', showLink = false } = Astro.props;
+const list = limit ? projects.slice(0, limit) : projects;
+const usedCategories = projectCategories.filter((c) => list.some((p) => p.category === c.key));
+---
+
+<section class="section projects" id="projeler" aria-labelledby="projects-title">
+  <div class="container">
+    <SectionTitle as={headingLevel} align="center" eyebrow="Projeler ve uygulamalar" title="Projelerimiz" text="Elektrik tesisatı, pano, fabrika, aydınlatma ve iş makinesi uygulamalarımızdan örnekler. Galeri, gerçek uygulama fotoğraflarımızla düzenli olarak güncellenmektedir." />
+
+    {
+      showFilters && (
+        <div class="projects__filters" role="group" aria-label="Kategoriye göre filtrele">
+          <button type="button" class="projects__filter is-active" data-filter="all" aria-pressed="true">
+            Tümü
+          </button>
+          {usedCategories.map((c) => (
+            <button type="button" class="projects__filter" data-filter={c.key} aria-pressed="false">
+              {c.label}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="projects__grid" data-gallery>
+      {list.map((p) => <ProjectCard project={p} />)}
+    </div>
+    <p class="projects__empty" data-gallery-empty hidden>Bu kategoride henüz görsel bulunmuyor.</p>
+
+    {
+      showLink && (
+        <div class="projects__more">
+          <a href="/projeler" class="btn btn--outline">
+            Tüm Projeler <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" data-lightbox-root hidden role="dialog" aria-modal="true" aria-label="Görsel önizleme">
+    <button type="button" class="lightbox__close" data-lightbox-close aria-label="Kapat"><Icon name="x" size={26} /></button>
+    <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Önceki görsel"><Icon name="chevron-left" size={28} /></button>
+    <figure class="lightbox__figure">
+      <img data-lightbox-img src="" alt="" />
+      <figcaption data-lightbox-caption></figcaption>
+    </figure>
+    <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Sonraki görsel"><Icon name="chevron-right" size={28} /></button>
+  </div>
+</section>
+
+<style>
+  .projects__filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .projects__filter {
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--text-gray);
+    transition: all var(--dur) var(--ease);
+  }
+  .projects__filter:hover {
+    border-color: var(--orange);
+    color: var(--text);
+  }
+  .projects__filter.is-active {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: var(--white);
+  }
+  .projects__grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 560px) {
+    .projects__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .projects__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .projects__empty {
+    text-align: center;
+    color: var(--text-gray);
+    padding-block: 2rem;
+  }
+  .projects__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(5, 9, 18, 0.92);
+  }
+  .lightbox__figure {
+    margin: 0;
+    max-width: min(1100px, 100%);
+    max-height: 100%;
+    display: grid;
+    gap: 0.75rem;
+    text-align: center;
+    color: var(--on-dark);
+  }
+  .lightbox__figure img {
+    max-height: 78vh;
+    width: auto;
+    max-width: 100%;
+    margin-inline: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+  }
+  .lightbox__figure figcaption strong {
+    display: block;
+    color: var(--white);
+    font-size: var(--fs-md);
+  }
+  .lightbox__close,
+  .lightbox__nav {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    transition: background-color var(--dur) var(--ease);
+  }
+  .lightbox__close:hover,
+  .lightbox__nav:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .lightbox__close {
+    top: 1rem;
+    right: 1rem;
+  }
+  .lightbox__nav {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lightbox__nav--prev {
+    left: 0.5rem;
+  }
+  .lightbox__nav--next {
+    right: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .lightbox__nav--prev {
+      left: 1.5rem;
+    }
+    .lightbox__nav--next {
+      right: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  // --- Filtre ---
+  const filters = document.querySelectorAll<HTMLButtonElement>('.projects__filter');
+  const grid = document.querySelector<HTMLElement>('[data-gallery]');
+  const empty = document.querySelector<HTMLElement>('[data-gallery-empty]');
+
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter ?? 'all';
+      filters.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+      let visible = 0;
+      grid?.querySelectorAll<HTMLElement>('.project-card').forEach((card) => {
+        const show = key === 'all' || card.dataset.category === key;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+
+  // --- Lightbox ---
+  const root = document.querySelector<HTMLElement>('[data-lightbox-root]');
+  const img = root?.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  const caption = root?.querySelector<HTMLElement>('[data-lightbox-caption]');
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]'));
+  let index = 0;
+  let lastFocus: HTMLElement | null = null;
+
+  const visibleLinks = () => links.filter((l) => !(l.closest('.project-card') as HTMLElement | null)?.hidden);
+
+  const show = (i: number) => {
+    const list = visibleLinks();
+    if (!list.length || !root || !img || !caption) return;
+    index = (i + list.length) % list.length;
+    const link = list[index];
+    img.src = link.href;
+    img.alt = link.querySelector('img')?.alt ?? '';
+    caption.innerHTML = `<strong>${link.dataset.title ?? ''}</strong>${link.dataset.caption ?? ''}`;
+  };
+
+  const open = (link: HTMLAnchorElement) => {
+    if (!root) return;
+    lastFocus = document.activeElement as HTMLElement;
+    root.hidden = false;
+    document.body.style.overflow = 'hidden';
+    show(visibleLinks().indexOf(link));
+    root.querySelector<HTMLElement>('[data-lightbox-close]')?.focus();
+  };
+
+  const close = () => {
+    if (!root) return;
+    root.hidden = true;
+    document.body.style.overflow = '';
+    lastFocus?.focus();
+  };
+
+  links.forEach((link) =>
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      open(link);
+    }),
+  );
+  root?.querySelector('[data-lightbox-close]')?.addEventListener('click', close);
+  root?.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => show(index - 1));
+  root?.querySelector('[data-lightbox-next]')?.addEventListener('click', () => show(index + 1));
+  root?.addEventListener('click', (e) => {
+    if (e.target === root) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!root || root.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+</script>

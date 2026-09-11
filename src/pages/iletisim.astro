@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import ContactSection from '@components/ContactSection.astro';
+import { breadcrumbSchema } from '@utils/seo';
+import { site } from '@data/site';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'İletişim', href: '/iletisim' },
+];
+---
+
+<BaseLayout
+  title="İletişim | Demir Elektrik Sincan / Ankara | 0506 254 76 78"
+  rawTitle
+  description={`Demir Elektrik iletişim: ${site.phone.display}. ${site.address.full}. ${site.hours.daysText} ${site.hours.display}. Telefon, WhatsApp, yol tarifi ve talep formu.`}
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    title="İletişim"
+    text="Elektrik arızası, tesisat ya da proje talebiniz için bizi arayın, WhatsApp'tan yazın veya formu doldurun."
+    breadcrumbs={crumbs}
+    eyebrow="Bize ulaşın"
+    showCta={false}
+  />
+  <ContactSection headingLevel="h2" />
+</BaseLayout>

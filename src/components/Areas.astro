@@ -1,0 +1,69 @@
+---
+import { areas } from '@data/site';
+import Icon from './Icon.astro';
+import SectionTitle from './SectionTitle.astro';
+---
+
+<section class="section section--gray" id="hizmet-alanlari" aria-labelledby="areas-title">
+  <div class="container">
+    <SectionTitle align="center" eyebrow="Nerelerde çalışıyoruz?" title="Hizmet Verdiğimiz Alanlar" text="Konuttan sanayiye, her ölçekte yapının elektrik ihtiyacına cevap veriyoruz." />
+    <ul class="areas">
+      {
+        areas.map((a, i) => (
+          <li class="areas__item reveal" data-delay={i % 3}>
+            <Icon name={a.icon} size={30} />
+            <span>{a.title}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .areas {
+    display: grid;
+    gap: 0.875rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 640px) {
+    .areas {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .areas {
+      grid-template-columns: repeat(9, 1fr);
+    }
+  }
+  .areas__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 1.25rem 0.5rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    text-align: center;
+    font-weight: 700;
+    font-size: var(--fs-xs);
+    color: var(--text);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .areas__item svg {
+    color: var(--orange);
+  }
+  .areas__item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: transparent;
+  }
+  @media (min-width: 640px) {
+    .areas__item {
+      font-size: var(--fs-sm);
+    }
+  }
+</style>

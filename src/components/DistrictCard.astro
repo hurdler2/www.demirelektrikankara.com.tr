@@ -1,0 +1,42 @@
+---
+import type { District } from '@data/districts';
+import Icon from './Icon.astro';
+
+interface Props {
+  district: District;
+}
+const { district } = Astro.props;
+const href = district.content ? `/hizmet-bolgeleri/${district.slug}` : undefined;
+---
+
+{
+  href ? (
+    <a href={href} class="tag district-tag district-tag--link">
+      <Icon name="map-pin" size={15} />
+      {district.name}
+      {district.type === 'semt' && <span class="district-tag__sub">{district.parent}</span>}
+    </a>
+  ) : (
+    <span class="tag tag--muted district-tag">
+      <Icon name="map-pin" size={15} />
+      {district.name}
+    </span>
+  )
+}
+
+<style>
+  .district-tag svg {
+    color: var(--orange);
+  }
+  .tag--muted svg {
+    color: var(--text-light);
+  }
+  .district-tag--link {
+    color: var(--primary-dark);
+  }
+  .district-tag__sub {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--text-gray);
+  }
+</style>

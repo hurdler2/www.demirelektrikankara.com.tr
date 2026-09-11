@@ -1,0 +1,314 @@
+---
+import { site, nav } from '@data/site';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+
+const current = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`));
+---
+
+<header class="header" id="site-header">
+  <div class="container header__inner">
+    <a href="/" class="header__logo" aria-label="Demir Elektrik ana sayfa">
+      <Logo />
+    </a>
+
+    <nav class="header__nav" aria-label="Ana menü">
+      <ul class="header__menu">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class:list={['header__link', { 'is-active': isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="header__cta">
+      <a href={site.phone.href} class="header__phone" aria-label={`Telefon: ${site.phone.display}`}>
+        <Icon name="phone" size={18} />
+        <span>{site.phone.display}</span>
+      </a>
+      <a href={site.phone.href} class="btn btn--primary header__call">
+        <Icon name="phone" size={18} />
+        Hemen Ara
+      </a>
+    </div>
+
+    <a href={site.phone.href} class="header__phone-mobile" aria-label={`Hemen ara: ${site.phone.display}`}>
+      <Icon name="phone" size={22} />
+    </a>
+
+    <button class="header__burger" type="button" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobile-nav" id="nav-toggle">
+      <Icon name="menu" size={26} class="header__burger-open" />
+      <Icon name="x" size={26} class="header__burger-close" />
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden>
+    <nav aria-label="Mobil menü" class="container">
+      <ul class="mobile-nav__menu">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class:list={['mobile-nav__link', { 'is-active': isActive(item.href) }]}>
+                {item.label}
+                <Icon name="chevron-right" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mobile-nav__contact">
+        <a href={site.phone.href} class="btn btn--primary btn--block btn--lg">
+          <Icon name="phone" size={20} />
+          {site.phone.display}
+        </a>
+        <a href={site.whatsapp.href} class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">
+          <Icon name="whatsapp" size={20} />
+          WhatsApp'tan Yaz
+        </a>
+        <p class="mobile-nav__hours">
+          <Icon name="clock" size={16} />
+          {site.hours.daysText} {site.hours.display}
+        </p>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 18, 32, 0.96);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    color: var(--white);
+    border-bottom: 1px solid var(--border-dark);
+    transition: box-shadow var(--dur) var(--ease);
+  }
+  .header.is-scrolled {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1340px;
+    height: var(--header-h);
+    transition: height var(--dur) var(--ease);
+  }
+  .header.is-scrolled .header__inner {
+    height: calc(var(--header-h) - 10px);
+  }
+
+  .header__logo {
+    display: inline-flex;
+    align-items: center;
+    margin-right: auto;
+  }
+
+  .header__nav {
+    display: none;
+  }
+  .header__menu {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+  .header__link {
+    display: inline-block;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--on-dark);
+    transition:
+      color var(--dur) var(--ease),
+      background-color var(--dur) var(--ease);
+  }
+  .header__link:hover,
+  .header__link.is-active {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.07);
+  }
+  .header__link.is-active {
+    color: var(--yellow);
+  }
+
+  .header__cta {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+  }
+  .header__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: var(--fs-md);
+    letter-spacing: 0.01em;
+    color: var(--white);
+    white-space: nowrap;
+  }
+  .header__phone svg {
+    color: var(--yellow);
+  }
+  .header__call {
+    min-height: 44px;
+    padding-inline: 1.125rem;
+  }
+
+  .header__phone-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--yellow);
+    color: var(--primary-dark);
+  }
+
+  .header__burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .header__burger-close {
+    display: none;
+  }
+  .header__burger[aria-expanded='true'] .header__burger-open {
+    display: none;
+  }
+  .header__burger[aria-expanded='true'] .header__burger-close {
+    display: block;
+  }
+
+  .mobile-nav {
+    position: absolute;
+    inset: 100% 0 auto 0;
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    background: var(--primary-dark);
+    border-bottom: 1px solid var(--border-dark);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    padding-block: 0.75rem 1.25rem;
+  }
+  .mobile-nav__menu {
+    display: grid;
+  }
+  .mobile-nav__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 0.25rem;
+    border-bottom: 1px solid var(--border-dark);
+    font-weight: 600;
+    color: var(--on-dark);
+  }
+  .mobile-nav__link.is-active {
+    color: var(--yellow);
+  }
+  .mobile-nav__link svg {
+    color: var(--text-light);
+  }
+  .mobile-nav__contact {
+    display: grid;
+    gap: 0.625rem;
+    padding-top: 1.25rem;
+  }
+  .mobile-nav__hours {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    font-size: var(--fs-sm);
+    color: var(--on-dark-muted);
+  }
+
+  @media (min-width: 1024px) {
+    .header__nav,
+    .header__cta {
+      display: flex;
+    }
+    .header__phone-mobile,
+    .header__burger,
+    .mobile-nav {
+      display: none !important;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1319px) {
+    .header__phone span {
+      display: none;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1139px) {
+    .header__link {
+      padding-inline: 0.45rem;
+      font-size: var(--fs-xs);
+    }
+  }
+  .mobile-nav[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('nav-toggle');
+  const panel = document.getElementById('mobile-nav');
+
+  if (header) {
+    let ticking = false;
+    const update = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+
+  if (toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
+      panel.hidden = !open;
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    toggle.addEventListener('click', () => setOpen(panel.hidden));
+    panel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+</script>

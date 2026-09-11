@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import ProjectsGallery from '@components/ProjectsGallery.astro';
+import CTASection from '@components/CTASection.astro';
+import { breadcrumbSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Projelerimiz', href: '/projeler' },
+];
+---
+
+<BaseLayout
+  title="Projelerimiz | Elektrik Tesisatı, Pano ve Aydınlatma Uygulamaları | Demir Elektrik"
+  rawTitle
+  description="Demir Elektrik'in Ankara genelinde gerçekleştirdiği elektrik tesisatı, pano, fabrika elektrik, aydınlatma, LED, iş makinesi, villa ve mağaza uygulamalarından örnekler."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    title="Projelerimiz"
+    text="Ankara genelinde gerçekleştirdiğimiz elektrik tesisatı, pano, fabrika, aydınlatma ve iş makinesi uygulamalarından örnekler."
+    breadcrumbs={crumbs}
+    eyebrow="Uygulamalar"
+  />
+  <ProjectsGallery headingLevel="h2" />
+  <CTASection title="Projeniz için teklif alın" text="Elektrik tesisatı, pano montajı ya da aydınlatma projeniz için bizi arayın; keşif sonrası net bilgi verelim." buttonLabel="Hemen Ara" />
+</BaseLayout>

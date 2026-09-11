@@ -1,0 +1,25 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  label?: string;
+  size?: 'sm' | 'md' | 'lg';
+  block?: boolean;
+  /** Özel ön-yazılı mesaj (URL encode edilir) */
+  message?: string;
+  class?: string;
+}
+const { label = "WhatsApp'tan Yaz", size = 'md', block = false, message, class: className } = Astro.props;
+const href = message ? `https://wa.me/${site.whatsapp.number}?text=${encodeURIComponent(message)}` : site.whatsapp.href;
+---
+
+<a
+  href={href}
+  class:list={['btn', 'btn--whatsapp', { 'btn--lg': size === 'lg', 'btn--sm': size === 'sm', 'btn--block': block }, className]}
+  target="_blank"
+  rel="noopener"
+>
+  <Icon name="whatsapp" size={size === 'lg' ? 22 : 18} />
+  {label}
+</a>

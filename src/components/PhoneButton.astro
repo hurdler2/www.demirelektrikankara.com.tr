@@ -1,0 +1,24 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  label?: string;
+  variant?: 'primary' | 'dark' | 'outline' | 'outline-light';
+  size?: 'sm' | 'md' | 'lg';
+  block?: boolean;
+  /** Numarayı da göster */
+  showNumber?: boolean;
+  class?: string;
+}
+const { label = 'Hemen Ara', variant = 'primary', size = 'md', block = false, showNumber = false, class: className } = Astro.props;
+---
+
+<a
+  href={site.phone.href}
+  class:list={['btn', `btn--${variant}`, { 'btn--lg': size === 'lg', 'btn--sm': size === 'sm', 'btn--block': block }, className]}
+  aria-label={`${label}: ${site.phone.display}`}
+>
+  <Icon name="phone" size={size === 'lg' ? 22 : 18} />
+  {showNumber ? site.phone.display : label}
+</a>

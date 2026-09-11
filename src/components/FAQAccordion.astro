@@ -1,0 +1,85 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { q: string; a: string }[];
+  /** İlk öğe açık gelsin */
+  openFirst?: boolean;
+  /** Aynı anda tek öğe açık kalsın */
+  single?: boolean;
+  onDark?: boolean;
+}
+const { items, openFirst = true, single = true, onDark = false } = Astro.props;
+const groupId = `faq-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class:list={['faq', { 'faq--dark': onDark }]} data-faq data-single={single ? 'true' : undefined}>
+  {
+    items.map((item, i) => (
+      <details class="faq__item" name={single ? groupId : undefined} open={openFirst && i === 0}>
+        <summary class="faq__q">
+          <span>{item.q}</span>
+          <Icon name="chevron-down" size={20} class="faq__icon" />
+        </summary>
+        <div class="faq__a">
+          <p>{item.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .faq__item {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .faq__item[open] {
+    border-color: rgba(255, 138, 0, 0.5);
+    box-shadow: var(--shadow);
+  }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 700;
+    font-size: var(--fs-base);
+    color: var(--text);
+  }
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__icon {
+    flex: none;
+    color: var(--orange);
+    transition: transform var(--dur) var(--ease);
+  }
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+  }
+  .faq__a {
+    padding: 0 1.25rem 1.125rem;
+    color: var(--text-gray);
+    line-height: 1.65;
+  }
+  .faq--dark .faq__item {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border-dark);
+  }
+  .faq--dark .faq__q {
+    color: var(--white);
+  }
+  .faq--dark .faq__a {
+    color: var(--on-dark);
+  }
+</style>

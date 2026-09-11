@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import CTASection from '@components/CTASection.astro';
+import { faq } from '@data/faq';
+import { breadcrumbSchema, faqSchema } from '@utils/seo';
+
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Sık Sorulan Sorular', href: '/sss' },
+];
+---
+
+<BaseLayout
+  title="Sık Sorulan Sorular | Ankara Elektrikçi | Demir Elektrik"
+  rawTitle
+  description="Demir Elektrik'in hizmet bölgeleri, elektrik arıza, tesisat, fabrika pano, iş makinesi elektrik, avize ve spot montajı ile çalışma saatleri hakkında sık sorulan sorular ve yanıtları."
+  schema={[breadcrumbSchema(crumbs), faqSchema(faq)]}
+>
+  <PageHero
+    title="Sık Sorulan Sorular"
+    text="Hizmetlerimiz, çalışma saatlerimiz ve hizmet bölgelerimiz hakkında en çok sorulan sorular."
+    breadcrumbs={crumbs}
+    eyebrow="Merak edilenler"
+  />
+  <section class="section">
+    <div class="container container--narrow">
+      <FAQAccordion items={faq} single={false} />
+    </div>
+  </section>
+  <CTASection title="Sorunuzun cevabını bulamadınız mı?" text="Bizi arayın ya da WhatsApp'tan yazın; elektrik ihtiyacınızla ilgili tüm sorularınızı yanıtlayalım." buttonLabel="Hemen Ara" />
+</BaseLayout>

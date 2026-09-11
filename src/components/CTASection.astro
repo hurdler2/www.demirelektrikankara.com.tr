@@ -1,0 +1,136 @@
+---
+import { site } from '@data/site';
+import Icon from './Icon.astro';
+import PhoneButton from './PhoneButton.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+  buttonLabel?: string;
+  /** Kompakt varyant (hizmet sayfası içi) */
+  compact?: boolean;
+}
+const {
+  title = 'Elektrik Arızanız mı Var?',
+  text = 'Ankara genelinde elektrik arıza ve teknik servis hizmeti için Demir Elektrik ile iletişime geçin.',
+  buttonLabel = 'Şimdi Ara',
+  compact = false,
+} = Astro.props;
+---
+
+<section class:list={['cta', { 'cta--compact': compact }]} aria-labelledby="cta-title">
+  <div class="container cta__inner">
+    <div class="cta__content">
+      <span class="cta__eyebrow"><Icon name="zap" size={16} /> Acil elektrik servisi</span>
+      <h2 id="cta-title" class="cta__title">{title}</h2>
+      <p class="cta__text">{text}</p>
+      <ul class="cta__meta">
+        <li><Icon name="phone" size={18} /> <a href={site.phone.href}>{site.phone.display}</a></li>
+        <li><Icon name="clock" size={18} /> {site.hours.daysText} {site.hours.display}</li>
+        <li><Icon name="map-pin" size={18} /> Ankara geneli</li>
+      </ul>
+    </div>
+    <div class="cta__actions">
+      <PhoneButton label={buttonLabel} size="lg" />
+      <WhatsAppLink size="lg" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    padding-block: clamp(3rem, 5vw, 4.5rem);
+    background:
+      radial-gradient(70% 90% at 0% 100%, rgba(255, 138, 0, 0.22), transparent 60%),
+      radial-gradient(50% 80% at 100% 0%, rgba(255, 193, 7, 0.16), transparent 60%),
+      linear-gradient(135deg, var(--secondary-dark), var(--primary-dark));
+    color: var(--white);
+    overflow: hidden;
+  }
+  .cta--compact {
+    border-radius: var(--radius-lg);
+    padding: clamp(2rem, 4vw, 3rem);
+  }
+  .cta--compact .cta__inner {
+    padding-inline: 0;
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    border: 60px solid rgba(255, 193, 7, 0.06);
+    pointer-events: none;
+  }
+  .cta__inner {
+    position: relative;
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .cta__inner {
+      grid-template-columns: 1.5fr 1fr;
+    }
+    .cta__actions {
+      justify-content: flex-end;
+    }
+  }
+  .cta__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 193, 7, 0.14);
+    color: var(--yellow);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .cta__title {
+    margin-top: 1rem;
+    font-size: var(--fs-2xl);
+  }
+  .cta__text {
+    margin-top: 0.75rem;
+    max-width: 56ch;
+    color: var(--on-dark);
+    font-size: var(--fs-md);
+  }
+  .cta__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+  .cta__meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cta__meta svg {
+    color: var(--yellow);
+  }
+  .cta__meta a {
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    color: var(--white);
+  }
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .cta__actions :global(.btn) {
+    flex: 1 1 200px;
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+import Breadcrumb from './Breadcrumb.astro';
+import PhoneButton from './PhoneButton.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+import type { BreadcrumbItem } from '@utils/seo';
+
+interface Props {
+  title: string;
+  text?: string;
+  breadcrumbs: BreadcrumbItem[];
+  showCta?: boolean;
+  eyebrow?: string;
+}
+const { title, text, breadcrumbs, showCta = true, eyebrow } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container">
+    <Breadcrumb items={breadcrumbs} />
+    {eyebrow && <span class="section-title__eyebrow page-hero__eyebrow">{eyebrow}</span>}
+    <h1>{title}</h1>
+    {text && <p class="page-hero__text">{text}</p>}
+    {
+      showCta && (
+        <div class="btn-group">
+          <PhoneButton showNumber />
+          <WhatsAppLink />
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero__eyebrow {
+    color: var(--yellow);
+  }
+</style>

@@ -1,0 +1,352 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import CTASection from '@components/CTASection.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import Icon from '@components/Icon.astro';
+import PhoneButton from '@components/PhoneButton.astro';
+import WhatsAppLink from '@components/WhatsAppLink.astro';
+import { services, servicesSorted, type Service } from '@data/services';
+import { landingDistricts } from '@data/districts';
+import { whyUs, site } from '@data/site';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '@utils/seo';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+
+interface Props {
+  service: Service;
+}
+const { service } = Astro.props;
+const path = `/hizmetler/${service.slug}`;
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Hizmetlerimiz', href: '/hizmetler' },
+  { name: service.shortTitle, href: path },
+];
+const related = servicesSorted.filter((s) => s.slug !== service.slug && s.category === service.category).slice(0, 3);
+const others = servicesSorted.filter((s) => s.slug !== service.slug && !related.includes(s)).slice(0, 3 - related.length);
+const relatedAll = [...related, ...others];
+const waMessage = `Merhaba Demir Elektrik, ${service.title.toLocaleLowerCase('tr')} hizmeti hakkında bilgi almak istiyorum.`;
+---
+
+<BaseLayout
+  title={service.seoTitle}
+  rawTitle
+  description={service.seoDescription}
+  schema={[breadcrumbSchema(crumbs), serviceSchema({ name: service.title, description: service.seoDescription, path }), faqSchema(service.faq)]}
+>
+  <PageHero title={service.title} text={service.excerpt} breadcrumbs={crumbs} eyebrow="Ankara geneli hizmet" />
+
+  <article class="section service">
+    <div class="container service__layout">
+      <div class="service__main">
+        <section class="service__block" aria-labelledby="desc-title">
+          <h2 id="desc-title">{service.title} Hizmetimiz</h2>
+          <div class="service__desc">
+            {service.description.map((p) => <p>{p}</p>)}
+          </div>
+        </section>
+
+        <section class="service__block" aria-labelledby="scope-title">
+          <h2 id="scope-title">Hizmet Kapsamı</h2>
+          <ul class="check-list service__scope">
+            {service.scope.map((s) => <li>{s}</li>)}
+          </ul>
+        </section>
+
+        <section class="service__block" aria-labelledby="problems-title">
+          <h2 id="problems-title">Hangi Problemleri Çözüyoruz?</h2>
+          <ul class="service__problems">
+            {
+              service.problems.map((p) => (
+                <li>
+                  <Icon name="alert-triangle" size={18} />
+                  <span>{p}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="service__block" aria-labelledby="process-title">
+          <h2 id="process-title">Nasıl Çalışıyoruz?</h2>
+          <ol class="service__process">
+            {
+              service.process.map((s, i) => (
+                <li>
+                  <span class="service__step-num">{i + 1}</span>
+                  <div>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <section class="service__block" aria-labelledby="why-title">
+          <h2 id="why-title">Neden Demir Elektrik?</h2>
+          <ul class="service__why">
+            {
+              whyUs.map((w) => (
+                <li>
+                  <span class="icon-badge"><Icon name={w.icon} size={22} /></span>
+                  <div>
+                    <h3>{w.title}</h3>
+                    <p>{w.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="service__block" aria-labelledby="areas-title">
+          <h2 id="areas-title">Ankara Hizmet Bölgeleri</h2>
+          <p class="service__areas-text">
+            {service.title.toLocaleLowerCase('tr')} hizmetimizi Sincan merkezli olarak Ankara'nın tüm ilçelerinde sunuyoruz. Öne çıkan bölgelerimiz:
+          </p>
+          <ul class="service__areas">
+            {
+              landingDistricts.map((d) => (
+                <li>
+                  <a href={`/hizmet-bolgeleri/${d.slug}`} class="tag"><Icon name="map-pin" size={14} /> {d.name}</a>
+                </li>
+              ))
+            }
+            <li><a href="/hizmet-bolgeleri" class="tag tag--muted">Tüm ilçeler <Icon name="arrow-right" size={14} /></a></li>
+          </ul>
+        </section>
+
+        <section class="service__block" aria-labelledby="faq-title">
+          <h2 id="faq-title">Sık Sorulan Sorular</h2>
+          <FAQAccordion items={service.faq} />
+        </section>
+
+        <CTASection compact title={`${service.shortTitle} için hemen arayın`} text={`Ankara genelinde ${service.title.toLocaleLowerCase('tr')} hizmeti için Demir Elektrik ile iletişime geçin.`} />
+      </div>
+
+      <aside class="service__side">
+        <div class="service__cta-card">
+          <span class="icon-badge icon-badge--solid"><Icon name={service.icon} /></span>
+          <h2>Hemen İletişime Geçin</h2>
+          <p>{site.hours.daysText} {site.hours.display} · Ankara geneli</p>
+          <a href={site.phone.href} class="service__phone">{site.phone.display}</a>
+          <div class="service__cta-actions">
+            <PhoneButton block />
+            <WhatsAppLink block message={waMessage} />
+          </div>
+        </div>
+
+        <nav class="service__related" aria-label="Diğer hizmetler">
+          <h2>Diğer Hizmetler</h2>
+          <ul>
+            {
+              relatedAll.map((s) => (
+                <li>
+                  <a href={`/hizmetler/${s.slug}`}>
+                    <Icon name={s.icon} size={18} />
+                    {s.title}
+                    <Icon name="chevron-right" size={16} class="service__related-arrow" />
+                  </a>
+                </li>
+              ))
+            }
+            <li class="service__related-all"><a href="/hizmetler">Tüm hizmetler <Icon name="arrow-right" size={16} /></a></li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .service__layout {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .service__layout {
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 3.5rem;
+    }
+    .service__side {
+      position: sticky;
+      top: calc(var(--header-h) + 1rem);
+    }
+  }
+  .service__main {
+    display: grid;
+    gap: 2.75rem;
+    min-width: 0;
+  }
+  .service__block h2 {
+    font-size: var(--fs-xl);
+    margin-bottom: 1rem;
+  }
+  .service__desc {
+    color: #344054;
+    font-size: var(--fs-md);
+  }
+  .service__scope {
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 560px) {
+    .service__scope {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .service__problems {
+    display: grid;
+    gap: 0.625rem;
+  }
+  .service__problems li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--gray-light);
+    border-left: 3px solid var(--orange);
+  }
+  .service__problems svg {
+    flex: none;
+    color: var(--orange);
+    margin-top: 3px;
+  }
+  .service__process {
+    display: grid;
+    gap: 1rem;
+  }
+  .service__process li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .service__step-num {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-dark);
+    color: var(--yellow);
+    font-weight: 800;
+  }
+  .service__process h3 {
+    font-size: var(--fs-md);
+  }
+  .service__process p {
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+    margin-top: 0.2rem;
+  }
+  .service__why {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .service__why {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .service__why li {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+  }
+  .service__why h3 {
+    font-size: var(--fs-base);
+  }
+  .service__why p {
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+    margin-top: 0.2rem;
+  }
+  .service__areas-text {
+    color: var(--text-gray);
+    margin-bottom: 1rem;
+  }
+  .service__areas-text::first-letter {
+    text-transform: uppercase;
+  }
+  .service__areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .service__areas svg {
+    color: var(--orange);
+  }
+
+  .service__cta-card {
+    padding: 1.75rem;
+    border-radius: var(--radius-lg);
+    background: var(--primary-dark);
+    color: var(--white);
+    background-image: radial-gradient(70% 60% at 100% 0%, rgba(255, 193, 7, 0.18), transparent 60%);
+  }
+  .service__cta-card h2 {
+    margin-top: 1rem;
+    font-size: var(--fs-lg);
+  }
+  .service__cta-card p {
+    margin-top: 0.375rem;
+    font-size: var(--fs-sm);
+    color: var(--on-dark-muted);
+  }
+  .service__phone {
+    display: block;
+    margin-top: 1rem;
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 1.875rem);
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .service__cta-actions {
+    display: grid;
+    gap: 0.625rem;
+    margin-top: 1.25rem;
+  }
+  .service__related {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+  }
+  .service__related h2 {
+    font-size: var(--fs-base);
+    margin-bottom: 0.75rem;
+  }
+  .service__related ul {
+    display: grid;
+  }
+  .service__related li a {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--gray-100);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    transition: color var(--dur) var(--ease);
+  }
+  .service__related li a:hover {
+    color: var(--orange);
+  }
+  .service__related li a > svg:first-child {
+    color: var(--orange);
+  }
+  .service__related-arrow {
+    margin-left: auto;
+    color: var(--text-light);
+  }
+  .service__related-all a {
+    color: var(--orange);
+  }
+</style>
