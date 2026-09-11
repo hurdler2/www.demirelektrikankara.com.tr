@@ -41,7 +41,7 @@ export const services: Service[] = [
     excerpt:
       'Sigorta atması, elektrik kesintisi, kaçak ve priz arızaları için Ankara genelinde hızlı arıza tespiti ve onarım.',
     description: [
-      'Evinizde ya da iş yerinizde elektrik aniden kesildiğinde, sigorta sürekli attığında ya da bir priz çalışmadığında sorunun kaynağını tahmin etmek zordur. Demir Elektrik olarak Ankara genelinde elektrik arızalarının tespiti ve giderilmesi konusunda 15 yılı aşkın tecrübeyle hizmet veriyoruz.',
+      'Evinizde ya da iş yerinizde elektrik aniden kesildiğinde, sigorta sürekli attığında ya da bir priz çalışmadığında sorunun kaynağını tahmin etmek zordur. Demir Elektrik olarak Ankara genelinde elektrik arızalarının tespiti ve giderilmesi konusunda 30 yılı aşkın tecrübeyle hizmet veriyoruz.',
       'Arızaya müdahale ederken önce sorunun kaynağını ölçüm cihazlarıyla tespit ediyor, ardından tesisatınızın güvenliğini tehlikeye atmadan kalıcı çözümü uyguluyoruz. Geçici çözümler yerine arızanın tekrar etmemesini hedefliyoruz.',
     ],
     scope: [

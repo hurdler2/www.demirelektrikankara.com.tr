@@ -45,7 +45,7 @@ export const site = {
     daysText: 'Her gün',
   },
 
-  experienceYears: 15,
+  experienceYears: 30,
   serviceArea: 'Ankara geneli ve tüm ilçeler',
   districtCount: 25,
 
@@ -74,7 +74,7 @@ export const nav = [
 ] as const;
 
 export const trustBadges = [
-  { icon: 'award', title: '15+ Yıllık Tecrübe', text: 'Konut ve endüstriyel elektrik işlerinde' },
+  { icon: 'award', title: '30+ Yıllık Tecrübe', text: 'Konut ve endüstriyel elektrik işlerinde' },
   { icon: 'map-pin', title: 'Ankara Geneli Hizmet', text: 'Sincan merkezli, tüm ilçelere' },
   { icon: 'clock', title: '08:00 – 23:00 Hizmet', text: 'Haftanın her günü' },
   { icon: 'shield-check', title: 'Profesyonel Elektrik Çözümleri', text: 'Güvenli ve kaliteli işçilik' },
@@ -83,8 +83,8 @@ export const trustBadges = [
 export const whyUs = [
   {
     icon: 'award',
-    title: '15+ Yıllık Tecrübe',
-    text: 'Elektrik sektöründe 15 yılı aşkın deneyimimizle farklı ölçeklerde konut ve endüstriyel elektrik projelerinde hizmet veriyoruz.',
+    title: '30+ Yıllık Tecrübe',
+    text: 'Elektrik sektöründe 30 yılı aşkın deneyimimizle farklı ölçeklerde konut ve endüstriyel elektrik projelerinde hizmet veriyoruz.',
   },
   {
     icon: 'map-pin',
@@ -116,7 +116,7 @@ export const processSteps = [
 ] as const;
 
 export const stats = [
-  { value: 15, suffix: '+', label: 'Yıllık Tecrübe', animate: true },
+  { value: 30, suffix: '+', label: 'Yıllık Tecrübe', animate: true },
   { value: 25, suffix: '', label: 'Ankara İlçesinde Hizmet', animate: true },
   { value: '08:00 – 23:00', suffix: '', label: 'Çalışma Saatleri', animate: false },
   { value: 100, prefix: '%', suffix: '', label: 'Müşteri Odaklı Hizmet', animate: true },

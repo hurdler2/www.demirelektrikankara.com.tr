@@ -49,7 +49,7 @@ export const districts: District[] = [
       h1: 'Sincan Elektrikçi',
       subtitle: 'Merkezimiz Sincan\'da. Arıza, tesisat, pano ve aydınlatma işlerinde en yakın ekip biziz.',
       intro: [
-        'Demir Elektrik\'in merkezi Sincan Menderes Mahallesi\'nde bulunuyor. Bu nedenle Sincan içindeki elektrik arızalarına ve tesisat işlerine en hızlı ulaşabildiğimiz bölge burası. Törekent, Fatih, Yenikent, Temelli ve Sincan merkezdeki konut, iş yeri ve sanayi müşterilerimize 15 yılı aşkın süredir hizmet veriyoruz.',
+        'Demir Elektrik\'in merkezi Sincan Menderes Mahallesi\'nde bulunuyor. Bu nedenle Sincan içindeki elektrik arızalarına ve tesisat işlerine en hızlı ulaşabildiğimiz bölge burası. Törekent, Fatih, Yenikent, Temelli ve Sincan merkezdeki konut, iş yeri ve sanayi müşterilerimize 30 yılı aşkın süredir hizmet veriyoruz.',
         'Sincan hem yoğun konut bölgeleri hem de Sincan Organize Sanayi Bölgesi ve 1. OSB ile Ankara\'nın en önemli üretim merkezlerinden biri. Bu yapı, ekibimizin bir günde hem bir dairede sigorta arızasına hem de bir fabrikada pano montajına müdahale etmesi anlamına geliyor.',
       ],
       highlightedServices: ['elektrik-ariza', 'ev-elektrik-tesisati', 'fabrika-elektrik', 'elektrik-pano-montaji'],
