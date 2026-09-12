@@ -35,6 +35,8 @@ export interface District {
   /** Bağlı olduğu ilçe (semtler için) */
   parent?: string;
   featured: boolean;
+  /** Bulunma hâli özel biçimi (örn. "Gölbaşı'nda"). Boşsa kural ile üretilir. */
+  locative?: string;
   content?: DistrictContent;
 }
 
@@ -436,6 +438,7 @@ export const districts: District[] = [
   },
   {
     name: 'Gölbaşı',
+    locative: "Gölbaşı'nda",
     slug: 'golbasi-elektrikci',
     type: 'ilce',
     featured: true,

@@ -10,6 +10,7 @@ import { landingDistricts, type District, type DistrictContent } from '@data/dis
 import { getService } from '@data/services';
 import { site } from '@data/site';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@utils/seo';
+import { locative } from '@utils/tr';
 
 export function getStaticPaths() {
   return landingDistricts.map((d) => ({ params: { slug: d.slug }, props: { district: d } }));
@@ -21,6 +22,8 @@ interface Props {
 const { district } = Astro.props;
 const c = district.content;
 const path = `/hizmet-bolgeleri/${district.slug}`;
+/** "Sincan'da", "Yenikent'te", "Gölbaşı'nda" */
+const inDistrict = locative(district.name, district.locative);
 const crumbs = [
   { name: 'Ana Sayfa', href: '/' },
   { name: 'Hizmet Bölgeleri', href: '/hizmet-bolgeleri' },
@@ -65,7 +68,7 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
     <div class="container">
       <div class="section-title">
         <span class="section-title__eyebrow">Öne çıkan hizmetler</span>
-        <h2 id="dist-services">{district.name}'da En Çok Talep Edilen Hizmetler</h2>
+        <h2 id="dist-services">{inDistrict} En Çok Talep Edilen Hizmetler</h2>
       </div>
       <div class="grid grid--4">
         {highlighted.map((s, i) => <ServiceCard service={s} delay={i} />)}
@@ -78,7 +81,7 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
     <div class="container">
       <div class="section-title">
         <span class="section-title__eyebrow">Bölgeye özel</span>
-        <h2 id="dist-notes">{district.name}'da Nasıl Çalışıyoruz?</h2>
+        <h2 id="dist-notes">{inDistrict} Nasıl Çalışıyoruz?</h2>
       </div>
       <div class="grid grid--3">
         {
@@ -93,7 +96,7 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
       </div>
 
       <div class="district__hoods">
-        <h3><Icon name="map-pin" size={18} /> {district.name}'da hizmet verdiğimiz bölgeler</h3>
+        <h3><Icon name="map-pin" size={18} /> {inDistrict} hizmet verdiğimiz bölgeler</h3>
         <ul>
           {c.neighborhoods.map((n) => <li class="tag tag--muted">{n}</li>)}
         </ul>
@@ -101,7 +104,7 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
     </div>
   </section>
 
-  <Process title={`${district.name}'da Arıza ve Tesisat Süreci`} />
+  <Process title={`${inDistrict} Arıza ve Tesisat Süreci`} />
 
   <section class="section section--gray" aria-labelledby="dist-faq">
     <div class="container container--narrow">
@@ -113,7 +116,7 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
     </div>
   </section>
 
-  <CTASection title={`${district.name}'da elektrik arızanız mı var?`} text={`${district.name} ve çevresinde elektrik arıza, tesisat, pano ve aydınlatma hizmeti için Demir Elektrik'i arayın.`} />
+  <CTASection title={`${inDistrict} elektrik arızanız mı var?`} text={`${district.name} ve çevresinde elektrik arıza, tesisat, pano ve aydınlatma hizmeti için Demir Elektrik'i arayın.`} />
 
   <section class="section" aria-labelledby="other-districts">
     <div class="container">
