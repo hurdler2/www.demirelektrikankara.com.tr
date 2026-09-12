@@ -7,6 +7,7 @@ import FAQAccordion from '@components/FAQAccordion.astro';
 import Process from '@components/Process.astro';
 import Icon from '@components/Icon.astro';
 import { landingDistricts, type District, type DistrictContent } from '@data/districts';
+import { getNeighborhoodsOf } from '@data/neighborhoods';
 import { getService } from '@data/services';
 import { site } from '@data/site';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@utils/seo';
@@ -31,6 +32,7 @@ const crumbs = [
 ];
 const highlighted = c.highlightedServices.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
 const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
+const hoods = getNeighborhoodsOf(district.slug);
 ---
 
 <BaseLayout
@@ -103,6 +105,34 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
       </div>
     </div>
   </section>
+
+  {
+    hoods.length > 0 && (
+      <section class="section section--gray" aria-labelledby="dist-hood-pages">
+        <div class="container">
+          <div class="section-title">
+            <span class="section-title__eyebrow">Mahalle bazlı hizmet</span>
+            <h2 id="dist-hood-pages">{inDistrict} Mahalle Mahalle Elektrikçi</h2>
+            <p class="section-title__text">
+              {district.name} içinde bulunduğunuz mahalleye özel elektrik arıza, tesisat ve aydınlatma bilgileri için mahallenizin sayfasına göz atın.
+            </p>
+          </div>
+          <ul class="district__hood-pages">
+            {hoods.map((n, i) => (
+              <li>
+                <a href={`/hizmet-bolgeleri/${district.slug}/${n.slug}`} class="district__hood-card reveal" data-delay={i % 4}>
+                  <span class="icon-badge"><Icon name="map-pin" size={20} /></span>
+                  <span class="district__hood-name">{n.content.h1}</span>
+                  <span class="district__hood-sub">{n.content.subtitle}</span>
+                  <span class="district__hood-arrow"><Icon name="arrow-right" size={18} /></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <Process title={`${inDistrict} Arıza ve Tesisat Süreci`} />
 
@@ -213,6 +243,56 @@ const otherDistricts = landingDistricts.filter((d) => d.slug !== district.slug);
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+  .district__hood-pages {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .district__hood-pages {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .district__hood-pages {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .district__hood-card {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 1.25rem 1.25rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    color: var(--text);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .district__hood-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--orange);
+  }
+  .district__hood-name {
+    font-weight: 800;
+    font-size: var(--fs-md);
+  }
+  .district__hood-sub {
+    font-size: var(--fs-xs);
+    color: var(--text-gray);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .district__hood-arrow {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    color: var(--orange);
   }
   .district__other-title {
     font-size: var(--fs-lg);

@@ -1,0 +1,251 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import ServiceCard from '@components/ServiceCard.astro';
+import CTASection from '@components/CTASection.astro';
+import FAQAccordion from '@components/FAQAccordion.astro';
+import Process from '@components/Process.astro';
+import Icon from '@components/Icon.astro';
+import { getDistrict } from '@data/districts';
+import { neighborhoods, getNeighborhoodsOf, type Neighborhood } from '@data/neighborhoods';
+import { getService } from '@data/services';
+import { site } from '@data/site';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '@utils/seo';
+import { locative } from '@utils/tr';
+
+export function getStaticPaths() {
+  return neighborhoods.map((n) => ({
+    params: { district: n.districtSlug, slug: n.slug },
+    props: { neighborhood: n },
+  }));
+}
+
+interface Props {
+  neighborhood: Neighborhood;
+}
+const { neighborhood } = Astro.props;
+const c = neighborhood.content;
+const district = getDistrict(neighborhood.districtSlug);
+if (!district) {
+  throw new Error(`Mahalle "${neighborhood.slug}" için ilçe bulunamadı: ${neighborhood.districtSlug}`);
+}
+const districtPath = `/hizmet-bolgeleri/${district.slug}`;
+const path = `${districtPath}/${neighborhood.slug}`;
+/** "Törekent'te", "Pınarbaşı'nda" */
+const inHood = locative(neighborhood.name, neighborhood.locative);
+const crumbs = [
+  { name: 'Ana Sayfa', href: '/' },
+  { name: 'Hizmet Bölgeleri', href: '/hizmet-bolgeleri' },
+  { name: district.content.h1, href: districtPath },
+  { name: c.h1, href: path },
+];
+const highlighted = c.highlightedServices.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
+const siblings = getNeighborhoodsOf(district.slug).filter((n) => n.slug !== neighborhood.slug);
+---
+
+<BaseLayout
+  title={c.seoTitle}
+  rawTitle
+  description={c.seoDescription}
+  schema={[
+    breadcrumbSchema(crumbs),
+    serviceSchema({ name: `${neighborhood.name} Elektrikçi`, description: c.seoDescription, path, areaName: `${neighborhood.name}, ${district.name}` }),
+    faqSchema(c.faq),
+  ]}
+>
+  <PageHero title={c.h1} text={c.subtitle} breadcrumbs={crumbs} eyebrow={`${district.name} · Ankara`} />
+
+  <article class="section hood">
+    <div class="container">
+      <div class="hood__intro">
+        <div class="hood__text">
+          {c.intro.map((p) => <p>{p}</p>)}
+        </div>
+        <aside class="hood__facts">
+          <h2>{neighborhood.name} için hızlı bilgi</h2>
+          <ul>
+            <li><Icon name="phone" size={18} /> <a href={site.phone.href}>{site.phone.display}</a></li>
+            <li><Icon name="clock" size={18} /> {site.hours.daysText} {site.hours.display}</li>
+            <li><Icon name="map-pin" size={18} /> {neighborhood.name} Mah. / {district.name}</li>
+            <li><Icon name="navigation" size={18} /> Merkez: {site.address.district} / {site.address.city}</li>
+            <li><Icon name="award" size={18} /> 30+ yıllık tecrübe</li>
+          </ul>
+          <a href={districtPath} class="hood__parent"><Icon name="arrow-right" size={16} /> {district.content.h1} sayfası</a>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <section class="section section--gray" aria-labelledby="hood-services">
+    <div class="container">
+      <div class="section-title">
+        <span class="section-title__eyebrow">Öne çıkan hizmetler</span>
+        <h2 id="hood-services">{inHood} En Çok Talep Edilen Elektrik Hizmetleri</h2>
+      </div>
+      <div class="grid grid--4">
+        {highlighted.map((s, i) => <ServiceCard service={s} delay={i} />)}
+      </div>
+      <p class="hood__all-services"><a href="/hizmetler" class="btn btn--outline">Tüm Hizmetler <Icon name="arrow-right" size={18} /></a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="hood-notes">
+    <div class="container">
+      <div class="section-title">
+        <span class="section-title__eyebrow">Mahalleye özel</span>
+        <h2 id="hood-notes">{inHood} Nasıl Çalışıyoruz?</h2>
+      </div>
+      <div class="grid grid--3">
+        {
+          c.localNotes.map((n, i) => (
+            <div class="card reveal" data-delay={i}>
+              <span class="icon-badge"><Icon name="zap" size={22} /></span>
+              <h3 class="hood__note-title">{n.title}</h3>
+              <p class="hood__note-text">{n.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="hood__landmarks">
+        <h3><Icon name="map-pin" size={18} /> {inHood} hizmet verdiğimiz noktalar</h3>
+        <ul>
+          {c.landmarks.map((l) => <li class="tag tag--muted">{l}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Process title={`${inHood} Arıza ve Tesisat Süreci`} />
+
+  <section class="section section--gray" aria-labelledby="hood-faq">
+    <div class="container container--narrow">
+      <div class="section-title section-title--center">
+        <span class="section-title__eyebrow">Sık sorulanlar</span>
+        <h2 id="hood-faq">{neighborhood.name} Elektrikçi Hakkında Sorular</h2>
+      </div>
+      <FAQAccordion items={c.faq} />
+    </div>
+  </section>
+
+  <CTASection title={`${inHood} elektrik arızanız mı var?`} text={`${neighborhood.name} ve çevresinde elektrik arıza, tesisat, pano ve aydınlatma hizmeti için Demir Elektrik'i arayın.`} />
+
+  <section class="section" aria-labelledby="hood-siblings">
+    <div class="container">
+      <h2 id="hood-siblings" class="hood__other-title">{locative(district.name, district.locative)} Diğer Mahalleler</h2>
+      <ul class="hood__other">
+        {
+          siblings.map((n) => (
+            <li>
+              <a href={`${districtPath}/${n.slug}`} class="tag"><Icon name="map-pin" size={14} /> {n.content.h1}</a>
+            </li>
+          ))
+        }
+        <li><a href={districtPath} class="tag tag--muted">{district.content.h1} <Icon name="arrow-right" size={14} /></a></li>
+        <li><a href="/hizmet-bolgeleri" class="tag tag--muted">Tüm bölgeler <Icon name="arrow-right" size={14} /></a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hood__intro {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .hood__intro {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 3.5rem;
+    }
+  }
+  .hood__text {
+    color: #344054;
+    font-size: var(--fs-md);
+    max-width: 68ch;
+  }
+  .hood__facts {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--primary-dark);
+    color: var(--white);
+    background-image: radial-gradient(70% 60% at 100% 0%, rgba(255, 193, 7, 0.18), transparent 60%);
+  }
+  .hood__facts h2 {
+    font-size: var(--fs-base);
+    margin-bottom: 1rem;
+  }
+  .hood__facts ul {
+    display: grid;
+    gap: 0.75rem;
+    font-size: var(--fs-sm);
+    color: var(--on-dark);
+  }
+  .hood__facts li {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .hood__facts svg {
+    color: var(--yellow);
+    flex: none;
+  }
+  .hood__facts li a {
+    font-weight: 800;
+    font-size: var(--fs-lg);
+    color: var(--white);
+  }
+  .hood__parent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--yellow);
+  }
+  .hood__all-services {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .hood__note-title {
+    margin-top: 1rem;
+  }
+  .hood__note-text {
+    margin-top: 0.5rem;
+    color: var(--text-gray);
+    font-size: var(--fs-sm);
+  }
+  .hood__landmarks {
+    margin-top: 2.5rem;
+  }
+  .hood__landmarks h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-base);
+    margin-bottom: 0.875rem;
+  }
+  .hood__landmarks svg {
+    color: var(--orange);
+  }
+  .hood__landmarks ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .hood__other-title {
+    font-size: var(--fs-lg);
+    margin-bottom: 1rem;
+  }
+  .hood__other {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .hood__other svg {
+    color: var(--orange);
+  }
+</style>
