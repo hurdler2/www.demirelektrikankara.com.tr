@@ -7,7 +7,8 @@ interface Props {
   project: Project;
 }
 const { project } = Astro.props;
-const large = project.imageLarge ?? project.image;
+const isVideo = Boolean(project.video);
+const large = project.video ?? project.imageLarge ?? project.image ?? '';
 ---
 
 <figure class="project-card reveal" data-category={project.category}>
@@ -15,12 +16,29 @@ const large = project.imageLarge ?? project.image;
     href={large}
     class="project-card__link"
     data-lightbox
+    data-video={project.video}
     data-title={project.title}
     data-caption={getCategoryLabel(project.category) + (project.location ? ` · ${project.location}` : '')}
-    aria-label={`${project.title} görselini büyüt`}
+    aria-label={isVideo ? `${project.title} videosunu oynat` : `${project.title} görselini büyüt`}
   >
-    <img src={project.image} alt={project.alt} loading="lazy" decoding="async" width="600" height="450" />
-    <span class="project-card__zoom"><Icon name="zoom-in" size={20} /></span>
+    {
+      isVideo ? (
+        <video
+          src={project.video}
+          poster={project.image}
+          muted
+          playsinline
+          preload="metadata"
+          aria-label={project.alt}
+          width="600"
+          height="450"
+        />
+      ) : (
+        <img src={project.image} alt={project.alt} loading="lazy" decoding="async" width="600" height="450" />
+      )
+    }
+    <span class="project-card__zoom"><Icon name={isVideo ? 'play' : 'zoom-in'} size={20} /></span>
+    {isVideo && <span class="project-card__play" aria-hidden="true"><Icon name="play" size={28} /></span>}
     {project.placeholder && <span class="project-card__badge">Örnek görsel</span>}
   </a>
   <figcaption class="project-card__caption">
@@ -50,14 +68,37 @@ const large = project.imageLarge ?? project.image;
     background: var(--secondary-dark);
     overflow: hidden;
   }
-  .project-card__link img {
+  .project-card__link img,
+  .project-card__link video {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 400ms var(--ease);
   }
-  .project-card:hover img {
+  .project-card:hover img,
+  .project-card:hover video {
     transform: scale(1.04);
+  }
+  .project-card__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    pointer-events: none;
+  }
+  .project-card__play :global(svg) {
+    padding: 0.85rem;
+    box-sizing: content-box;
+    border-radius: 50%;
+    background: rgba(11, 18, 32, 0.65);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+  .project-card:hover .project-card__play :global(svg) {
+    transform: scale(1.08);
+    background: var(--orange);
   }
   .project-card__zoom {
     position: absolute;

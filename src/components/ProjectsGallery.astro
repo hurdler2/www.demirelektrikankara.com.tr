@@ -57,6 +57,7 @@ const usedCategories = projectCategories.filter((c) => list.some((p) => p.catego
     <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Önceki görsel"><Icon name="chevron-left" size={28} /></button>
     <figure class="lightbox__figure">
       <img data-lightbox-img src="" alt="" />
+      <video data-lightbox-video controls playsinline preload="metadata" hidden></video>
       <figcaption data-lightbox-caption></figcaption>
     </figure>
     <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Sonraki görsel"><Icon name="chevron-right" size={28} /></button>
@@ -137,13 +138,18 @@ const usedCategories = projectCategories.filter((c) => list.some((p) => p.catego
     text-align: center;
     color: var(--on-dark);
   }
-  .lightbox__figure img {
+  .lightbox__figure img,
+  .lightbox__figure video {
     max-height: 78vh;
     width: auto;
     max-width: 100%;
     margin-inline: auto;
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
+  }
+  .lightbox__figure img[hidden],
+  .lightbox__figure video[hidden] {
+    display: none;
   }
   .lightbox__figure figcaption strong {
     display: block;
@@ -217,7 +223,15 @@ const usedCategories = projectCategories.filter((c) => list.some((p) => p.catego
   // --- Lightbox ---
   const root = document.querySelector<HTMLElement>('[data-lightbox-root]');
   const img = root?.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  const video = root?.querySelector<HTMLVideoElement>('[data-lightbox-video]');
   const caption = root?.querySelector<HTMLElement>('[data-lightbox-caption]');
+
+  const stopVideo = () => {
+    if (!video) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  };
   const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-lightbox]'));
   let index = 0;
   let lastFocus: HTMLElement | null = null;
@@ -229,8 +243,22 @@ const usedCategories = projectCategories.filter((c) => list.some((p) => p.catego
     if (!list.length || !root || !img || !caption) return;
     index = (i + list.length) % list.length;
     const link = list[index];
-    img.src = link.href;
-    img.alt = link.querySelector('img')?.alt ?? '';
+    const src = link.dataset.video;
+    if (src && video) {
+      stopVideo();
+      img.hidden = true;
+      img.removeAttribute('src');
+      video.hidden = false;
+      video.poster = link.querySelector('video')?.poster ?? '';
+      video.src = src;
+      video.play().catch(() => {});
+    } else {
+      stopVideo();
+      if (video) video.hidden = true;
+      img.hidden = false;
+      img.src = link.href;
+      img.alt = link.querySelector('img')?.alt ?? '';
+    }
     caption.innerHTML = `<strong>${link.dataset.title ?? ''}</strong>${link.dataset.caption ?? ''}`;
   };
 
@@ -245,6 +273,7 @@ const usedCategories = projectCategories.filter((c) => list.some((p) => p.catego
 
   const close = () => {
     if (!root) return;
+    stopVideo();
     root.hidden = true;
     document.body.style.overflow = '';
     lastFocus?.focus();

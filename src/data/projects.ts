@@ -8,6 +8,13 @@
  *
  * `placeholder: true` olan kayıtlar galeride "Örnek görsel" etiketiyle gösterilir;
  * böylece ziyaretçiye gerçek proje fotoğrafı izlenimi verilmez.
+ *
+ * Video eklemek için:
+ *  1. Videoyu `public/videos/projects/` altına MP4 (H.264) olarak koy; önerilen en fazla 20 MB.
+ *  2. İstersen kapak görselini `public/images/projects/` altına koy ve `image` alanına yaz.
+ *     Kapak verilmezse tarayıcı videonun ilk karesini gösterir.
+ *  3. Kayda `video: '/videos/projects/dosya.mp4'` ekle. Kart üzerinde oynat simgesi çıkar,
+ *     lightbox'ta video kontrollerle oynatılır.
  */
 
 export const projectCategories = [
@@ -27,10 +34,12 @@ export interface Project {
   id: string;
   title: string;
   category: ProjectCategory;
-  /** public/ altındaki yol */
-  image: string;
+  /** public/ altındaki görsel yolu. Video kayıtlarında kapak (poster) olarak kullanılır, isteğe bağlı. */
+  image?: string;
   /** Lightbox'ta gösterilecek büyük görsel; boşsa image kullanılır */
   imageLarge?: string;
+  /** public/ altındaki MP4 yolu. Verilirse kart ve lightbox video olarak çalışır. */
+  video?: string;
   alt: string;
   /** İlçe / bölge (isteğe bağlı) */
   location?: string;
