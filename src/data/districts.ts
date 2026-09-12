@@ -84,6 +84,54 @@ export const districts: District[] = [
     },
   },
   {
+    name: 'Yenikent',
+    slug: 'yenikent-elektrikci',
+    type: 'semt',
+    parent: 'Sincan',
+    featured: true,
+    content: {
+      h1: 'Yenikent Elektrikçi',
+      subtitle: 'Sincan merkezimize birkaç dakika mesafede. Yenikent\'in sitelerinde, müstakil evlerinde ve iş yerlerinde arıza, tesisat ve aydınlatma hizmeti.',
+      intro: [
+        'Yenikent, Sincan\'ın kuzeyinde, Ankara-İstanbul yolu üzerinde büyüyen ve son yıllarda yeni sitelerle hızla gelişen bir bölge. Bir yanda TOKİ konutları ve çok katlı siteler, diğer yanda müstakil evler ve bahçeli yapılar aynı semtte yer alıyor. Demir Elektrik olarak Yenikent\'teki bu farklı konut tiplerinin tamamında elektrik arıza, tesisat ve aydınlatma işleri yapıyoruz.',
+        'Merkezimiz Sincan Menderes Mahallesi\'nde olduğu için Yenikent\'e arıza çağrılarına çok kısa sürede ulaşıyoruz. Sigorta atması, elektrik kesintisi ve kaçak akım gibi acil durumlarda aynı gün müdahale ediyor; yeni taşınılan dairelerde priz, anahtar ve aydınlatma düzenlemelerini tek seferde tamamlıyoruz.',
+      ],
+      highlightedServices: ['elektrik-ariza', 'ev-elektrik-tesisati', 'villa-elektrik-tesisati', 'spot-montaji'],
+      localNotes: [
+        {
+          title: 'Yeni site ve TOKİ daireleri',
+          text: 'Yenikent\'teki yeni sitelerde ve TOKİ konutlarında ek priz hattı, ankastre mutfak için güçlendirilmiş hat, klima hattı çekimi ve spot aydınlatma düzenlemesi en sık aldığımız talepler.',
+        },
+        {
+          title: 'Müstakil ve bahçeli evler',
+          text: 'Yenikent\'in müstakil evlerinde bahçe aydınlatması, dış mekan priz ve armatür montajı, garaj ve depo elektriği, eski tesisatın kaçak akım röleli panoyla yenilenmesi işlerini yapıyoruz.',
+        },
+        {
+          title: 'Ankara-İstanbul yolu iş yerleri',
+          text: 'Yenikent çevresindeki dükkan, depo, oto servis ve küçük atölyelerde üç faz hat çekimi, pano kurulumu ve tabela-vitrin aydınlatması konusunda hizmet veriyoruz.',
+        },
+      ],
+      neighborhoods: ['Yenikent Merkez', 'Yenikent TOKİ', 'Alcı', 'Yenipeçenek', 'Mülk', 'Ücret', 'Osmaniye', 'Temelli', 'Malıköy'],
+      faq: [
+        {
+          q: 'Yenikent\'e ne kadar sürede geliyorsunuz?',
+          a: 'Merkezimiz Sincan\'da olduğu için Yenikent\'e çoğu zaman aynı gün, acil arızalarda genellikle bir saat içinde ulaşıyoruz.',
+        },
+        {
+          q: 'Yeni taşındığımız dairede priz ve aydınlatma düzenlemesi yapıyor musunuz?',
+          a: 'Evet. Yenikent\'teki yeni dairelerde ek priz, anahtar değişimi, klima ve ankastre hattı ile spot ve avize montajını tek seferde yapıyoruz.',
+        },
+        {
+          q: 'Müstakil evimizin bahçe aydınlatmasını yapabilir misiniz?',
+          a: 'Evet. Yenikent\'teki bahçeli evlerde dış mekan aydınlatması, bahçe prizleri ve sensörlü armatür montajı yapıyoruz.',
+        },
+      ],
+      seoTitle: 'Yenikent Elektrikçi | Sincan Yenikent Elektrik Arıza ve Tesisat | Demir Elektrik',
+      seoDescription:
+        'Yenikent elektrikçi: Sincan Yenikent\'te elektrik arıza, daire ve müstakil ev tesisatı, bahçe aydınlatması, spot ve avize montajı. Sincan merkezli hızlı servis. Demir Elektrik: 0506 254 76 78.',
+    },
+  },
+  {
     name: 'Etimesgut',
     slug: 'etimesgut-elektrikci',
     type: 'ilce',
