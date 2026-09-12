@@ -5,3 +5,4 @@
 *.jpg binary
 *.woff2 binary
 *.ps1 text eol=crlf
+*.mp4 binary

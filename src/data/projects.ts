@@ -73,11 +73,13 @@ export const projects: Project[] = [
   },
   {
     id: 'p-aydinlatma-1',
-    title: 'Spot ve Avize Aydınlatma',
+    title: 'Mutfak Tezgah Altı LED Aydınlatma',
     category: 'aydinlatma',
-    image: '/images/projects/placeholder-aydinlatma.svg',
-    alt: 'Spot ve avize aydınlatma uygulaması için örnek görsel',
-    placeholder: true,
+    image: '/images/projects/aydinlatma-1.webp',
+    video: '/videos/projects/aydinlatma-1.mp4',
+    alt: 'Demir Elektrik teknisyeni mutfak dolabı altına LED şerit aydınlatma monte ediyor',
+    location: 'Ankara',
+    placeholder: false,
   },
   {
     id: 'p-led-1',
